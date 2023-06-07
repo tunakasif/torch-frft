@@ -1,0 +1,50 @@
+fail_fast: true
+repos:
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.42.1
+    hooks:
+      - id: commitizen
+      - id: commitizen-branch
+        stages: [push]
+  - repo: local
+    hooks:
+      - id: poetry-export
+        name: requirements
+        entry: poetry export
+        args:
+          [
+            "-f",
+            "requirements.txt",
+            "-o",
+            "requirements.txt",
+            "--with",
+            "dev",
+            "--without-hashes",
+          ]
+        language: system
+        pass_filenames: false
+  - repo: local
+    hooks:
+      - id: format
+        name: format
+        entry: make format
+        language: system
+  - repo: local
+    hooks:
+      - id: lint
+        name: lint
+        entry: make lint
+        language: system
+  - repo: local
+    hooks:
+      - id: security
+        name: security
+        entry: make security
+        language: system
+  - repo: local
+    hooks:
+      - id: test
+        name: test
+        entry: make test
+        language: system
+        pass_filenames: false
