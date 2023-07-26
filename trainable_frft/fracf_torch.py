@@ -91,7 +91,7 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
     # Chirp Multiplication
     x = torch.arange(Nstart, Nend) / deltax
     chirp = torch.exp(alpha * x**2)
-    multip = torch.mul(x, chirp)
+    multip = torch.mul(signal, chirp)
 
     # Chirp Convolution
     t = torch.arange(-N + 1, N) / deltax
