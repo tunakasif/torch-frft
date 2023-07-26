@@ -108,7 +108,7 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
     Hc = Hc[N - 1 : 2 * N - 1]
 
     # Chirp Multiplication
-    result = torch.mul(Aphi * chirp, Hc)
+    result = torch.mul(Aphi * chirp, Hc) / deltax
 
     # Adjustment
     if N % 2 == 1:
