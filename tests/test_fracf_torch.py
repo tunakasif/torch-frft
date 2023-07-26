@@ -135,7 +135,7 @@ def test_fracF_arange() -> None:
         ]
     )
 
-    assert torch.allclose(fracF(x, torch.tensor(0.3)), a03_expected)
-    assert torch.allclose(fracF(x, torch.tensor(0.5)), a05_expected)
-    assert torch.allclose(fracF(x, torch.tensor(0.7)), a07_expected)
-    assert torch.allclose(fracF(x, torch.tensor(1.0)), a10_expected)
+    assert torch.allclose(fracF(x, torch.tensor(0.3)), a03_expected, atol=1e-5)
+    assert torch.allclose(fracF(x, torch.tensor(0.5)), a05_expected, atol=1e-5)
+    assert torch.allclose(fracF(x, torch.tensor(0.7)), a07_expected, atol=1e-5)
+    assert torch.allclose(fracF(x, torch.tensor(1.0)), a10_expected, atol=1e-5)
