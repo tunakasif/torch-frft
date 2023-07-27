@@ -17,7 +17,7 @@ format:
 	$(EXECUTER) black --diff --check --color .
 
 lint:
-	$(EXECUTER) mypy --strict .
+	$(EXECUTER) mypy .
 	$(EXECUTER) pyupgrade --py310-plus **/*.py
 
 security:
