@@ -1,6 +1,14 @@
 import torch
 
-from trainable_frft.fracf_torch import bizdec, bizinter, corefrmod2, fracF
+from trainable_frft.fracf_torch import bizdec, bizinter, corefrmod2, dflip, fracF
+
+
+def test_dflip_1d() -> None:
+    N = 1000
+    torch.manual_seed(0)
+    x = torch.rand(N, 1)
+    assert torch.allclose(dflip(x), torch.concat((x[:1], x[1:].flip(0)), dim=0))
+    assert torch.allclose(dflip(dflip(x)), x)
 
 
 def test_bizdec() -> None:
@@ -170,3 +178,34 @@ def test_fracF_arange() -> None:
     assert torch.allclose(fracF(x, torch.tensor(1.0)), a10_expected, atol=1e-5)
     assert torch.allclose(fracF(x, torch.tensor(2.5)), a25_expected, atol=1e-5)
     assert torch.allclose(fracF(x, torch.tensor(-2.5)), a_neg25_expected, atol=1e-5)
+
+
+def test_fracF_integer() -> None:
+    from torch.fft import fft, fftshift, ifft
+
+    N = 1000
+    torch.manual_seed(0)
+    x = torch.rand(N)
+    sqrtN = torch.sqrt(torch.tensor(N))
+
+    assert torch.allclose(fracF(x, torch.tensor(0.0)), x, atol=1e-5)
+    assert torch.allclose(
+        fracF(x, torch.tensor(1.0)),
+        fftshift(fft(fftshift(x))) / sqrtN,
+        atol=1e-5,
+    )
+    assert torch.allclose(
+        fracF(x, torch.tensor(-1.0)),
+        fftshift(ifft(fftshift(x))) * sqrtN,
+        atol=1e-5,
+    )
+    assert torch.allclose(
+        fracF(x, torch.tensor(2.0)).to(torch.complex64),
+        fftshift(fft(fft(fftshift(x)))) / torch.tensor(N),
+        atol=1e-5,
+    )
+    assert torch.allclose(
+        fracF(x, torch.tensor(-2.0)).to(torch.complex64),
+        fftshift(ifft(ifft(fftshift(x)))) * torch.tensor(N),
+        atol=1e-5,
+    )
