@@ -46,27 +46,33 @@ def dflip(tensor: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     return torch.concat((first, remaining.flip(dim)), dim=dim)
 
 
-def bizdec(x: torch.Tensor) -> torch.Tensor:
-    k = torch.arange(0, x.size(0), 2)
-    return x[k].reshape(-1)
+def bizdec(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+    k = torch.arange(0, x.size(dim), 2)
+    return x.index_select(dim, k)
 
 
-def bizinter(x: torch.Tensor) -> torch.Tensor:
+def bizinter(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     if x.is_complex():
-        return _bizinter_real(x.real) + 1j * _bizinter_real(x.imag)
+        return _bizinter_real(x.real, dim=dim) + 1j * _bizinter_real(x.imag, dim=dim)
     else:
-        return _bizinter_real(x)
+        return _bizinter_real(x, dim=dim)
 
 
-def _bizinter_real(x: torch.Tensor) -> torch.Tensor:
-    N = x.size(0)
+def _bizinter_real(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+    N = x.size(dim)
     N1 = N // 2 + (N % 2)
     N2 = 2 * N - (N // 2)
 
-    upsampled = torch.stack([x, torch.zeros(N)]).T.reshape(-1)
-    xf = fft(upsampled)
-    xf[N1:N2] = 0
-    return 2 * torch.real(ifft(xf))
+    upsampled = upsample2(x, dim=dim)
+    xf = fft(upsampled, dim=dim)
+    xf = torch.index_fill(xf, dim, torch.arange(N1, N2), 0)
+    return 2 * torch.real(ifft(xf, dim=dim))
+
+
+def upsample2(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+    upsampled = x.repeat_interleave(2, dim=dim)
+    idx = torch.arange(1, upsampled.size(dim), 2)
+    return torch.index_fill(upsampled, dim, idx, 0)
 
 
 def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
