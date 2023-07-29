@@ -41,7 +41,7 @@ def fracF(fc: torch.Tensor, a_param: torch.Tensor) -> torch.Tensor:
     return res
 
 
-def dflip(tensor: torch.Tensor, *, dim: int = 0) -> torch.Tensor:
+def dflip(tensor: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     first, remaining = torch.tensor_split(tensor, (1,), dim=dim)
     return torch.concat((first, remaining.flip(dim)), dim=dim)
 

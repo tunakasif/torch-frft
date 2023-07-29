@@ -6,7 +6,7 @@ from trainable_frft.fracf_torch import bizdec, bizinter, corefrmod2, dflip, frac
 def test_dflip_1d() -> None:
     N = 1000
     torch.manual_seed(0)
-    x = torch.rand(N, 1)
+    x = torch.rand(N)
     assert torch.allclose(dflip(x), torch.concat((x[:1], x[1:].flip(0)), dim=0))
     assert torch.allclose(dflip(dflip(x)), x)
 
