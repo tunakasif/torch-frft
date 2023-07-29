@@ -41,6 +41,21 @@ def fracF(fc: torch.Tensor, a_param: torch.Tensor) -> torch.Tensor:
     return res
 
 
+def fracF_05_15(fc: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
+    N = fc.size(0)
+    if N % 2 == 1:
+        raise ValueError("signal size must be even")
+    if a < 0.5 or a > 1.5:
+        raise ValueError("a must be between 0.5 and 1.5")
+    fc = torch.cat([torch.zeros(N), bizinter(fc.reshape(-1)), torch.zeros(N)])
+    res = fc
+    res = corefrmod2(res, a)
+    res = res[N : 3 * N]
+    res = bizdec(res)
+    res[0] *= 2
+    return res
+
+
 def dflip(tensor: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     first, remaining = torch.tensor_split(tensor, (1,), dim=dim)
     return torch.concat((first, remaining.flip(dim)), dim=dim)
