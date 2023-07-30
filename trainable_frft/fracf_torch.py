@@ -2,8 +2,8 @@ import torch
 from torch.fft import fft, fftshift, ifft
 
 
-def fracF(fc: torch.Tensor, a_param: torch.Tensor) -> torch.Tensor:
-    N = fc.size(0)
+def fracF(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+    N = fc.size(dim)
     if N % 2 == 1:
         raise ValueError("signal size must be even")
 
@@ -13,30 +13,30 @@ def fracF(fc: torch.Tensor, a_param: torch.Tensor) -> torch.Tensor:
     elif a < -2:
         a += 4
 
-    sqrtN = torch.sqrt(torch.tensor(N))
     if a == 0.0:
         return fc
     elif a == 2.0 or a == -2.0:
-        return dflip(fc)
+        return dflip(fc, dim=dim)
     elif a == 1.0:
-        return fftshift(fft(fftshift(fc))) / sqrtN
+        return fftshift(fft(fftshift(fc), dim=dim, norm="ortho"))
     elif a == -1.0:
-        return fftshift(ifft(fftshift(fc))) * sqrtN
+        return fftshift(ifft(fftshift(fc), dim=dim, norm="ortho"))
 
-    fc = torch.cat([torch.zeros(N), bizinter(fc.reshape(-1)), torch.zeros(N)])
+    # TODO: update concatenation for n-dim
+    fc = torch.cat([torch.zeros(N), bizinter(fc, dim=dim), torch.zeros(N)])
     res = fc
 
     if (0 < a < 0.5) or (1.5 < a < 2):
-        res = corefrmod2(fc, torch.tensor(1.0))
+        res = corefrmod2(fc, torch.tensor(1.0), dim=dim)
         a -= 1
 
     if (-0.5 < a < 0) or (-2 < a < -1.5):
-        res = corefrmod2(fc, torch.tensor(-1.0))
+        res = corefrmod2(fc, torch.tensor(-1.0), dim=dim)
         a += 1
 
-    res = corefrmod2(res, a)
+    res = corefrmod2(res, a, dim=dim)
     res = res[N : 3 * N]
-    res = bizdec(res)
+    res = bizdec(res, dim=dim)
     res[0] *= 2
     return res
 
@@ -75,9 +75,9 @@ def upsample2(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     return torch.index_fill(upsampled, dim, idx, 0)
 
 
-def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
+def corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     # constants
-    N = signal.size(0)
+    N = signal.size(dim)
     Nend = N // 2
     Nstart = -(N % 2 + Nend)
     deltax = torch.sqrt(torch.tensor(N))
@@ -93,7 +93,7 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
     # Chirp Multiplication
     x = torch.arange(Nstart, Nend) / deltax
     chirp = torch.exp(alpha * x**2)
-    multip = torch.mul(signal, chirp)
+    multip = vecmul_ndim(signal, chirp, dim=dim)
 
     # Chirp Convolution
     t = torch.arange(-N + 1, N) / deltax
@@ -108,14 +108,15 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
             dim=dim,
         )
     )
-    Hc = Hc[N - 1 : 2 * N - 1]
+    Hc = torch.index_select(Hc, dim, torch.arange(N - 1, 2 * N - 1))
 
     # Chirp Multiplication
     result = vecmul_ndim(Hc, Aphi * chirp, dim=dim) / deltax
 
     # Adjustment
     if N % 2 == 1:
-        return torch.roll(result, -1)
+        # TODO: verify roll for n-dim
+        return torch.roll(result, -1, dims=(dim,))
     else:
         return result
 
