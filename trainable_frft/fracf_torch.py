@@ -7,12 +7,14 @@ def fracF(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Te
     if N % 2 == 1:
         raise ValueError("signal size must be even")
 
+    # 4-modulation and shifting to [-2, 2] interval
     a = torch.fmod(a_param, 4)
     if a > 2:
         a -= 4
     elif a < -2:
         a += 4
 
+    # special integer cases
     if a == 0.0:
         return fc
     elif a == 2.0 or a == -2.0:
@@ -22,10 +24,11 @@ def fracF(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Te
     elif a == -1.0:
         return fftshift(ifft(fftshift(fc), dim=dim, norm="ortho"))
 
-    # TODO: update concatenation for n-dim
-    fc = torch.cat([torch.zeros(N), bizinter(fc, dim=dim), torch.zeros(N)])
-    res = fc
+    biz = bizinter(fc, dim=dim)
+    zeros = torch.zeros_like(biz).index_select(dim, torch.arange(0, N))
+    fc = torch.cat([zeros, biz, zeros], dim=dim)
 
+    res = fc
     if (0 < a < 0.5) or (1.5 < a < 2):
         res = corefrmod2(fc, torch.tensor(1.0), dim=dim)
         a -= 1
@@ -35,9 +38,15 @@ def fracF(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Te
         a += 1
 
     res = corefrmod2(res, a, dim=dim)
-    res = res[N : 3 * N]
+    res = torch.index_select(res, dim=dim, index=torch.arange(N, 3 * N))
     res = bizdec(res, dim=dim)
-    res[0] *= 2
+
+    # Double the first entry of the vector in the given dimension,
+    # res[0] *= 2 in n-dimensional case, i.e., Hadamard product with
+    # [2, 1, 1, ..., 1] along n-th axis.
+    first_entry_doubler_vec = torch.ones(res.size(dim))
+    first_entry_doubler_vec[0] = 2
+    res = vecmul_ndim(res, first_entry_doubler_vec, dim=dim)
     return res
 
 
@@ -115,7 +124,6 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torch
 
     # Adjustment
     if N % 2 == 1:
-        # TODO: verify roll for n-dim
         return torch.roll(result, -1, dims=(dim,))
     else:
         return result
