@@ -102,18 +102,35 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor) -> torch.Tensor:
     N2 = hlptc.size(0)
     next_power_two = 2 ** torch.ceil(torch.log2(torch.tensor(N2 + N - 1))).int()
     Hc = ifft(
-        torch.mul(
+        vecmul_ndim(
+            fft(multip, n=next_power_two, dim=dim),
             fft(hlptc, n=next_power_two),
-            fft(multip, n=next_power_two),
+            dim=dim,
         )
     )
     Hc = Hc[N - 1 : 2 * N - 1]
 
     # Chirp Multiplication
-    result = torch.mul(Aphi * chirp, Hc) / deltax
+    result = vecmul_ndim(Hc, Aphi * chirp, dim=dim) / deltax
 
     # Adjustment
     if N % 2 == 1:
         return torch.roll(result, -1)
     else:
         return result
+
+
+def vecmul_ndim(tensor: torch.Tensor, vector: torch.Tensor, *, dim: int = -1):
+    """
+    Multiply two tensors (`torch.mul()`) along a given dimension.
+    """
+    return torch.einsum(_get_mul_dim_einstr(len(tensor.shape), dim), tensor, vector)
+
+
+def _get_mul_dim_einstr(dim_count: int, req_dim: int) -> str:
+    dim = torch.remainder(req_dim, torch.tensor(dim_count))
+    if dim_count <= dim:
+        raise ValueError("Dimension size error.")
+    diff = dim_count - dim
+    remaining_str = "".join([chr(num) for num in range(97, 97 + diff)])
+    return f"...{remaining_str},a->...{remaining_str}"
