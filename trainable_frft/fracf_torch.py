@@ -121,7 +121,12 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torch
         return result
 
 
-def vecmul_ndim(tensor: torch.Tensor, vector: torch.Tensor, *, dim: int = -1):
+def vecmul_ndim(
+    tensor: torch.Tensor,
+    vector: torch.Tensor,
+    *,
+    dim: int = -1,
+) -> torch.Tensor:
     """
     Multiply two tensors (`torch.mul()`) along a given dimension.
     """
