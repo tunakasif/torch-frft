@@ -1,7 +1,11 @@
+from pathlib import Path
+
+import scipy
 import torch
 
 from trainable_frft.fracf_torch import fracF
 
+test_data_path = Path(__file__).parent.joinpath("data")
 X = torch.tensor(
     [
         [0, 0, 0, 0],
@@ -163,3 +167,30 @@ def test_base_case() -> None:
         fracF(fracF(X, two, dim=0), two, dim=1),
         torch.fft.fftn(torch.fft.fftn(X, norm="ortho"), norm="ortho"),
     )
+
+
+def test_3D() -> None:
+    global test_data_path
+
+    tol = 1e-5
+    for dataname in ("rand3d_a090.mat", "ones3d_a065.mat"):
+        mat_data = scipy.io.loadmat(
+            test_data_path.joinpath(dataname),
+            variable_names=[
+                "input",
+                "a",
+                "expected_dim0",
+                "expected_dim1",
+                "expected_dim2",
+            ],
+            squeeze_me=True,
+        )
+        a = torch.tensor(mat_data["a"], dtype=torch.float32)
+        X = torch.tensor(mat_data["input"], dtype=torch.float32)
+        expected_dim0 = torch.tensor(mat_data["expected_dim0"], dtype=torch.complex64)
+        expected_dim1 = torch.tensor(mat_data["expected_dim1"], dtype=torch.complex64)
+        expected_dim2 = torch.tensor(mat_data["expected_dim2"], dtype=torch.complex64)
+
+        assert torch.allclose(fracF(X, a, dim=0), expected_dim0, atol=tol)
+        assert torch.allclose(fracF(X, a, dim=1), expected_dim1, atol=tol)
+        assert torch.allclose(fracF(X, a, dim=2), expected_dim2, atol=tol)
