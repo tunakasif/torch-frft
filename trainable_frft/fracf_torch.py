@@ -115,7 +115,8 @@ def corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torch
             fft(multip, n=next_power_two, dim=dim),
             fft(hlptc, n=next_power_two),
             dim=dim,
-        )
+        ),
+        dim=dim,
     )
     Hc = torch.index_select(Hc, dim, torch.arange(N - 1, 2 * N - 1))
 
