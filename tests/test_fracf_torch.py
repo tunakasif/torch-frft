@@ -1,3 +1,4 @@
+import pytest
 import torch
 
 from trainable_frft.fracf_torch import bizdec, bizinter, corefrmod2, dflip, fracF
@@ -210,3 +211,10 @@ def test_fracF_integer() -> None:
         fftshift(ifft(ifft(fftshift(x)))) * torch.tensor(N),
         atol=1e-5,
     )
+
+
+def test_odd_size_error() -> None:
+    X = torch.ones(5)
+    a = torch.rand(1)
+    with pytest.raises(ValueError):
+        fracF(X, a)
