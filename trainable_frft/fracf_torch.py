@@ -143,9 +143,9 @@ def vecmul_ndim(
 
 
 def _get_mul_dim_einstr(dim_count: int, req_dim: int) -> str:
-    dim = torch.remainder(req_dim, torch.tensor(dim_count))
-    if dim_count <= dim:
+    if req_dim < -dim_count or req_dim >= dim_count:
         raise ValueError("Dimension size error.")
+    dim = torch.remainder(req_dim, torch.tensor(dim_count))
     diff = dim_count - dim
     remaining_str = "".join([chr(num) for num in range(97, 97 + diff)])
     return f"...{remaining_str},a->...{remaining_str}"

@@ -1,6 +1,7 @@
+import pytest
 import torch
 
-from trainable_frft.fracf_torch import bizdec, bizinter, corefrmod2, upsample2
+from trainable_frft.fracf_torch import _get_mul_dim_einstr, bizdec, bizinter, corefrmod2, upsample2
 
 X = torch.tensor(
     [
@@ -143,3 +144,23 @@ def test_corefrmod2() -> None:
 
     assert torch.allclose(corefrmod2(X, a, dim=0), expected_dim0)
     assert torch.allclose(corefrmod2(X, a, dim=1), expected_dim1)
+
+
+def test_get_mul_dim_einstr() -> None:
+    assert _get_mul_dim_einstr(3, 0) == "...abc,a->...abc"
+    assert _get_mul_dim_einstr(3, -3) == "...abc,a->...abc"
+
+    assert _get_mul_dim_einstr(3, 1) == "...ab,a->...ab"
+    assert _get_mul_dim_einstr(3, -2) == "...ab,a->...ab"
+
+    assert _get_mul_dim_einstr(3, 2) == "...a,a->...a"
+    assert _get_mul_dim_einstr(3, -1) == "...a,a->...a"
+
+
+def test_get_mul_dim_einstr_error() -> None:
+    with pytest.raises(ValueError):
+        _get_mul_dim_einstr(3, 3)
+    with pytest.raises(ValueError):
+        _get_mul_dim_einstr(3, 4)
+    with pytest.raises(ValueError):
+        _get_mul_dim_einstr(3, -4)
