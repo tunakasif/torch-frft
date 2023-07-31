@@ -14,7 +14,7 @@ X = torch.tensor(
 )
 
 
-def test_fracfn() -> None:
+def test_fracF_along_dims() -> None:
     global X
     a = torch.tensor(0.75)
     expected_dim0 = torch.tensor(
@@ -93,7 +93,73 @@ def test_fracfn() -> None:
         ]
     )
 
-    tol = 1e-4
-    # assert torch.allclose(fracF(X, a, dim=0), expected_dim0, atol=tol)
-    assert torch.allclose(fracF(X, a, dim=1), expected_dim1, atol=tol)
-    assert torch.allclose(fracF(X, a), expected_dim1, atol=tol)
+    assert torch.allclose(fracF(X, a, dim=0), expected_dim0)
+    assert torch.allclose(fracF(X, a, dim=1), expected_dim1)
+    assert torch.allclose(fracF(X, a), expected_dim1)
+
+
+def test_fracFn() -> None:
+    global X
+    a0 = torch.tensor(0.80)
+    a1 = torch.tensor(1.25)
+    expected = torch.tensor(
+        [
+            [
+                0.688842550742503 - 1j * 1.05025022587593,
+                -1.5232285106647 - 1j * 0.743334167643746,
+                -4.58605878637312 + 1j * 2.84544820399633,
+                -0.349084616201554 - 1j * 0.616835515516242,
+            ],
+            [
+                -0.0999660396698176 + 1j * 1.81524234357208,
+                2.13908086021153 - 1j * 0.481447770834742,
+                1.68345545085984 - 1j * 7.43616563323154,
+                1.4051660436296 + 1j * 0.522319644772944,
+            ],
+            [
+                -0.56304360405674 - 1j * 1.98256969443392,
+                -1.56516443709101 + 1j * 1.46044276194116,
+                3.57851342184798 + 1j * 7.94031937080238,
+                -2.29875957970397 + 1j * 0.288031570470201,
+            ],
+            [
+                -11.6066292756661 + 1j * 3.72969786803663,
+                5.5754363968664 + 1j * 12.3183955439532,
+                40.1508076837946 - 1j * 0.934258295678831,
+                2.23345435548267 + 1j * 7.82687317811882,
+            ],
+            [
+                -2.73051982783143 + 1j * 7.19439803347227,
+                7.7240001751366 + 1j * 1.51060037126872,
+                11.6968058241686 - 1j * 21.3261032159491,
+                5.70405160346758 + 1j * 2.02432220126325,
+            ],
+            [
+                4.24890047743273 + 1j * 0.683676796634407,
+                0.090562509169084 - 1j * 4.40583541439558,
+                -12.454278311989 - 1j * 4.33550012916856,
+                0.353561401416305 - 1j * 3.23584505823459,
+            ],
+        ]
+    )
+
+    assert torch.allclose(fracF(fracF(X, a0, dim=0), a1, dim=1), expected)
+
+
+def test_base_case() -> None:
+    X = torch.rand(1000, 1000, dtype=torch.complex64)
+    one = torch.tensor(1.0)
+    two = torch.tensor(2.0)
+
+    torch.allclose(
+        fracF(fracF(X, one, dim=0), one, dim=1),
+        torch.fft.fftn(X, norm="ortho"),
+    )
+    torch.allclose(
+        fracF(fracF(X, -one, dim=0), -one, dim=1),
+        torch.fft.ifftn(X, norm="ortho"),
+    )
+    torch.allclose(
+        fracF(fracF(X, two, dim=0), two, dim=1),
+        torch.fft.fftn(torch.fft.fftn(X, norm="ortho"), norm="ortho"),
+    )

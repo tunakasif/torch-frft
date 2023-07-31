@@ -141,5 +141,5 @@ def test_corefrmod2() -> None:
         ]
     )
 
-    # assert torch.allclose(corefrmod2(X, a, dim=0), expected_dim0)
+    assert torch.allclose(corefrmod2(X, a, dim=0), expected_dim0)
     assert torch.allclose(corefrmod2(X, a, dim=1), expected_dim1)
