@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "trainable-frft"
+name = "torch-frft"
 version = "0.3.0"
 description = ""
 authors = ["Tuna Alikaşifoğlu <tunakasif@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "trainable_frft" }]
+packages = [{ include = "torch_frft" }]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
@@ -53,7 +53,7 @@ tag_format = "$version"
 version = "0.3.0"
 version_files = [
     "pyproject.toml:^version",
-    "trainable_frft/__init__.py:__version__",
+    "torch_frft/__init__.py:__version__",
 ]
 major_version_zero = true
 update_changelog_on_bump = true

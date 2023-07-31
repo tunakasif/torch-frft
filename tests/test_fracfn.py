@@ -3,7 +3,7 @@ from pathlib import Path
 import scipy
 import torch
 
-from trainable_frft.fracf_torch import fracF
+from torch_frft.fracf_torch import fracF
 
 test_data_path = Path(__file__).parent.joinpath("data")
 X = torch.tensor(

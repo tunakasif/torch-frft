@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from trainable_frft.fracf_torch import _get_mul_dim_einstr, bizdec, bizinter, corefrmod2, upsample2
+from torch_frft.fracf_torch import _get_mul_dim_einstr, bizdec, bizinter, corefrmod2, upsample2
 
 X = torch.tensor(
     [
@@ -76,9 +76,42 @@ def test_bizinter_multi() -> None:
     )
     expected_dim1 = torch.tensor(
         [
-            [1.0, 0.76393202250021, 2.0, 3.0, 3.0, 3.0, 4.0, 5.236067977499789, 5.0, 3.0],
-            [6.0, 5.763932022500211, 7.0, 8.0, 8.0, 8.0, 9.0, 10.23606797749979, 10.0, 8.0],
-            [11.0, 10.76393202250021, 12.0, 13.0, 13.0, 13.0, 14.0, 15.23606797749979, 15.0, 13.0],
+            [
+                1.0,
+                0.76393202250021,
+                2.0,
+                3.0,
+                3.0,
+                3.0,
+                4.0,
+                5.236067977499789,
+                5.0,
+                3.0,
+            ],
+            [
+                6.0,
+                5.763932022500211,
+                7.0,
+                8.0,
+                8.0,
+                8.0,
+                9.0,
+                10.23606797749979,
+                10.0,
+                8.0,
+            ],
+            [
+                11.0,
+                10.76393202250021,
+                12.0,
+                13.0,
+                13.0,
+                13.0,
+                14.0,
+                15.23606797749979,
+                15.0,
+                13.0,
+            ],
         ],
         dtype=torch.float32,
     )

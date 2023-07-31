@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from trainable_frft.fracf_torch import bizdec, bizinter, corefrmod2, dflip, fracF
+from torch_frft.fracf_torch import bizdec, bizinter, corefrmod2, dflip, fracF
 
 
 def test_dflip_1d() -> None:

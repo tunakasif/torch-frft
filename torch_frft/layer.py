@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from trainable_frft.fracf_torch import fracF
+from torch_frft.fracf_torch import fracF
 
 
 class FrFTLayer(nn.Module):

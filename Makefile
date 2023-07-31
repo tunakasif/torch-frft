@@ -1,4 +1,4 @@
-PROJECT_NAME:=trainable_frft
+PROJECT_NAME:=torch_frft
 EXECUTER:=poetry run
 
 all: requirements format lint security test
