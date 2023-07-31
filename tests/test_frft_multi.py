@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from torch_frft.fracf_torch import _get_mul_dim_einstr, bizdec, bizinter, corefrmod2, upsample2
+from torch_frft.frft import _bizdec, _bizinter, _corefrmod2, _get_mul_dim_einstr, _upsample2
 
 X = torch.tensor(
     [
@@ -31,8 +31,8 @@ def test_bizdec_multi() -> None:
         dtype=torch.float32,
     )
 
-    assert torch.allclose(bizdec(X, dim=0), expected_dim0)
-    assert torch.allclose(bizdec(X, dim=1), expected_dim1)
+    assert torch.allclose(_bizdec(X, dim=0), expected_dim0)
+    assert torch.allclose(_bizdec(X, dim=1), expected_dim1)
 
 
 def test_upsample2_multi() -> None:
@@ -57,8 +57,8 @@ def test_upsample2_multi() -> None:
         dtype=torch.float32,
     )
 
-    assert torch.allclose(upsample2(X, dim=0), expected_dim0)
-    assert torch.allclose(upsample2(X, dim=1), expected_dim1)
+    assert torch.allclose(_upsample2(X, dim=0), expected_dim0)
+    assert torch.allclose(_upsample2(X, dim=1), expected_dim1)
 
 
 def test_bizinter_multi() -> None:
@@ -116,8 +116,8 @@ def test_bizinter_multi() -> None:
         dtype=torch.float32,
     )
 
-    assert torch.allclose(bizinter(X, dim=0), expected_dim0)
-    assert torch.allclose(bizinter(X, dim=1), expected_dim1)
+    assert torch.allclose(_bizinter(X, dim=0), expected_dim0)
+    assert torch.allclose(_bizinter(X, dim=1), expected_dim1)
 
 
 def test_corefrmod2() -> None:
@@ -175,8 +175,8 @@ def test_corefrmod2() -> None:
         ]
     )
 
-    assert torch.allclose(corefrmod2(X, a, dim=0), expected_dim0)
-    assert torch.allclose(corefrmod2(X, a, dim=1), expected_dim1)
+    assert torch.allclose(_corefrmod2(X, a, dim=0), expected_dim0)
+    assert torch.allclose(_corefrmod2(X, a, dim=1), expected_dim1)
 
 
 def test_get_mul_dim_einstr() -> None:

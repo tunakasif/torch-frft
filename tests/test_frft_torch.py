@@ -1,22 +1,22 @@
 import pytest
 import torch
 
-from torch_frft.fracf_torch import bizdec, bizinter, corefrmod2, dflip, fracF
+from torch_frft.frft import _bizdec, _bizinter, _corefrmod2, _dflip, frft
 
 
 def test_dflip_1d() -> None:
     N = 1000
     torch.manual_seed(0)
     x = torch.rand(N)
-    assert torch.allclose(dflip(x), torch.concat((x[:1], x[1:].flip(0)), dim=0))
-    assert torch.allclose(dflip(dflip(x)), x)
+    assert torch.allclose(_dflip(x), torch.concat((x[:1], x[1:].flip(0)), dim=0))
+    assert torch.allclose(_dflip(_dflip(x)), x)
 
 
 def test_bizdec() -> None:
     x1 = torch.tensor([1.0, 2.0, 3.0, 4.0])
     x2 = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])
-    y1 = bizdec(x1)
-    y2 = bizdec(x2)
+    y1 = _bizdec(x1)
+    y2 = _bizdec(x2)
     assert torch.allclose(y1, torch.tensor([1.0, 3.0]))
     assert torch.allclose(y2, torch.tensor([1.0, 3.0, 5.0]))
 
@@ -47,7 +47,7 @@ def test_bizinter() -> None:
             4.5,
         ]
     )
-    assert torch.allclose(bizinter(x10), y10_expected)
+    assert torch.allclose(_bizinter(x10), y10_expected)
 
 
 def test_corefrmod2() -> None:
@@ -81,11 +81,11 @@ def test_corefrmod2() -> None:
         ]
     )
 
-    assert torch.allclose(corefrmod2(x, torch.tensor(1.0)), a10_expected)
-    assert torch.allclose(corefrmod2(x, torch.tensor(0.5)), a05_expected)
+    assert torch.allclose(_corefrmod2(x, torch.tensor(1.0)), a10_expected)
+    assert torch.allclose(_corefrmod2(x, torch.tensor(0.5)), a05_expected)
 
 
-def test_fracF_arange() -> None:
+def test_frft_arange() -> None:
     x = torch.arange(0, 10)
     a03_expected = torch.tensor(
         [
@@ -174,15 +174,15 @@ def test_fracF_arange() -> None:
     )
 
     tol = 1e-4
-    assert torch.allclose(fracF(x, torch.tensor(0.3)), a03_expected, atol=tol)
-    assert torch.allclose(fracF(x, torch.tensor(0.5)), a05_expected, atol=tol)
-    assert torch.allclose(fracF(x, torch.tensor(0.7)), a07_expected, atol=tol)
-    assert torch.allclose(fracF(x, torch.tensor(1.0)), a10_expected, atol=tol)
-    assert torch.allclose(fracF(x, torch.tensor(2.5)), a25_expected, atol=tol)
-    assert torch.allclose(fracF(x, torch.tensor(-2.5)), a_neg25_expected, atol=tol)
+    assert torch.allclose(frft(x, torch.tensor(0.3)), a03_expected, atol=tol)
+    assert torch.allclose(frft(x, torch.tensor(0.5)), a05_expected, atol=tol)
+    assert torch.allclose(frft(x, torch.tensor(0.7)), a07_expected, atol=tol)
+    assert torch.allclose(frft(x, torch.tensor(1.0)), a10_expected, atol=tol)
+    assert torch.allclose(frft(x, torch.tensor(2.5)), a25_expected, atol=tol)
+    assert torch.allclose(frft(x, torch.tensor(-2.5)), a_neg25_expected, atol=tol)
 
 
-def test_fracF_integer() -> None:
+def test_frft_integer() -> None:
     from torch.fft import fft, fftshift, ifft
 
     N = 1000
@@ -190,24 +190,24 @@ def test_fracF_integer() -> None:
     x = torch.rand(N)
     sqrtN = torch.sqrt(torch.tensor(N))
 
-    assert torch.allclose(fracF(x, torch.tensor(0.0)), x, atol=1e-5)
+    assert torch.allclose(frft(x, torch.tensor(0.0)), x, atol=1e-5)
     assert torch.allclose(
-        fracF(x, torch.tensor(1.0)),
+        frft(x, torch.tensor(1.0)),
         fftshift(fft(fftshift(x))) / sqrtN,
         atol=1e-5,
     )
     assert torch.allclose(
-        fracF(x, torch.tensor(-1.0)),
+        frft(x, torch.tensor(-1.0)),
         fftshift(ifft(fftshift(x))) * sqrtN,
         atol=1e-5,
     )
     assert torch.allclose(
-        fracF(x, torch.tensor(2.0)).to(torch.complex64),
+        frft(x, torch.tensor(2.0)).to(torch.complex64),
         fftshift(fft(fft(fftshift(x)))) / torch.tensor(N),
         atol=1e-5,
     )
     assert torch.allclose(
-        fracF(x, torch.tensor(-2.0)).to(torch.complex64),
+        frft(x, torch.tensor(-2.0)).to(torch.complex64),
         fftshift(ifft(ifft(fftshift(x)))) * torch.tensor(N),
         atol=1e-5,
     )
@@ -217,4 +217,4 @@ def test_odd_size_error() -> None:
     X = torch.ones(5)
     a = torch.rand(1)
     with pytest.raises(ValueError):
-        fracF(X, a)
+        frft(X, a)

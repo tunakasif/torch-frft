@@ -3,7 +3,7 @@ from pathlib import Path
 import scipy
 import torch
 
-from torch_frft.fracf_torch import fracF
+from torch_frft.frft import frft
 
 test_data_path = Path(__file__).parent.joinpath("data")
 X = torch.tensor(
@@ -18,7 +18,7 @@ X = torch.tensor(
 )
 
 
-def test_fracF_along_dims() -> None:
+def test_frft_along_dims() -> None:
     global X
     a = torch.tensor(0.75)
     expected_dim0 = torch.tensor(
@@ -97,12 +97,12 @@ def test_fracF_along_dims() -> None:
         ]
     )
 
-    assert torch.allclose(fracF(X, a, dim=0), expected_dim0)
-    assert torch.allclose(fracF(X, a, dim=1), expected_dim1)
-    assert torch.allclose(fracF(X, a), expected_dim1)
+    assert torch.allclose(frft(X, a, dim=0), expected_dim0)
+    assert torch.allclose(frft(X, a, dim=1), expected_dim1)
+    assert torch.allclose(frft(X, a), expected_dim1)
 
 
-def test_fracFn() -> None:
+def test_frftn() -> None:
     global X
     a0 = torch.tensor(0.80)
     a1 = torch.tensor(1.25)
@@ -147,7 +147,7 @@ def test_fracFn() -> None:
         ]
     )
 
-    assert torch.allclose(fracF(fracF(X, a0, dim=0), a1, dim=1), expected)
+    assert torch.allclose(frft(frft(X, a0, dim=0), a1, dim=1), expected)
 
 
 def test_base_case() -> None:
@@ -156,15 +156,15 @@ def test_base_case() -> None:
     two = torch.tensor(2.0)
 
     torch.allclose(
-        fracF(fracF(X, one, dim=0), one, dim=1),
+        frft(frft(X, one, dim=0), one, dim=1),
         torch.fft.fftn(X, norm="ortho"),
     )
     torch.allclose(
-        fracF(fracF(X, -one, dim=0), -one, dim=1),
+        frft(frft(X, -one, dim=0), -one, dim=1),
         torch.fft.ifftn(X, norm="ortho"),
     )
     torch.allclose(
-        fracF(fracF(X, two, dim=0), two, dim=1),
+        frft(frft(X, two, dim=0), two, dim=1),
         torch.fft.fftn(torch.fft.fftn(X, norm="ortho"), norm="ortho"),
     )
 
@@ -191,6 +191,6 @@ def test_3D() -> None:
         expected_dim1 = torch.tensor(mat_data["expected_dim1"], dtype=torch.complex64)
         expected_dim2 = torch.tensor(mat_data["expected_dim2"], dtype=torch.complex64)
 
-        assert torch.allclose(fracF(X, a, dim=0), expected_dim0, atol=tol)
-        assert torch.allclose(fracF(X, a, dim=1), expected_dim1, atol=tol)
-        assert torch.allclose(fracF(X, a, dim=2), expected_dim2, atol=tol)
+        assert torch.allclose(frft(X, a, dim=0), expected_dim0, atol=tol)
+        assert torch.allclose(frft(X, a, dim=1), expected_dim1, atol=tol)
+        assert torch.allclose(frft(X, a, dim=2), expected_dim2, atol=tol)

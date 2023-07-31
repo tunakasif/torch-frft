@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from torch_frft.fracf_torch import fracF
+from torch_frft.frft import frft
 
 
 class FrFTLayer(nn.Module):
@@ -10,4 +10,4 @@ class FrFTLayer(nn.Module):
         self.order = nn.Parameter(torch.tensor(order, dtype=torch.float32))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return fracF(x, self.order)
+        return frft(x, self.order)
