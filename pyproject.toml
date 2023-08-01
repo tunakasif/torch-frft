@@ -40,6 +40,9 @@ line_length = 100
 [tool.black]
 line-length = 100
 
+[tool.ruff]
+line-length = 100
+
 [tool.mypy]
 ignore_missing_imports = true
 disallow_untyped_defs = true
