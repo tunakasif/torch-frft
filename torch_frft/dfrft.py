@@ -3,6 +3,10 @@ from math import ceil
 import torch
 
 
+def idfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
+    return dfrft(x, -a, dim=dim)
+
+
 def dfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
     dfrft_matrix = dfrftmtx(x.size(dim), a, device=x.device)
     return torch.einsum(_get_dfrft_einsum_str(len(x.shape), dim), dfrft_matrix, x)
@@ -15,6 +19,16 @@ def _get_dfrft_einsum_str(dim_count: int, req_dim: int) -> str:
     diff = dim_count - dim
     remaining_str = "".join([chr(num) for num in range(98, 98 + diff)])
     return f"ab,...{remaining_str}->...{remaining_str}"
+
+
+def idfrftmtx(
+    N: int,
+    a: float,
+    *,
+    approx_order: int = 2,
+    device: torch.device = torch.device("cpu"),
+) -> torch.Tensor:
+    return dfrftmtx(N, -a, approx_order=approx_order, device=device)
 
 
 def dfrftmtx(

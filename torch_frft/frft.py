@@ -2,6 +2,10 @@ import torch
 from torch.fft import fft, fftshift, ifft
 
 
+def ifrft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+    return frft(fc, -a_param, dim=dim)
+
+
 def frft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     N = fc.size(dim)
     if N % 2 == 1:
