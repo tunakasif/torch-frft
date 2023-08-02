@@ -99,3 +99,19 @@ def creates(
         dum = conv(dum, dum0)
 
     return cconvm(s) + torch.diag(torch.real(torch.fft.fft(s)))
+
+
+def createp(N: int, *, device: torch.device = torch.device("cpu")) -> torch.Tensor:
+    if N < 1:
+        raise ValueError("N must be positive integer.")
+
+    x1 = torch.ones(1 + N // 2, dtype=torch.float32, device=device)
+    x2 = -torch.ones(N - N // 2 - 1, dtype=torch.float32, device=device)
+    diagonal = torch.diag(torch.cat((x1, x2)))
+    anti = torch.diag(torch.ones(N - 1, device=device), -1).rot90()
+    P = (diagonal + anti) / torch.sqrt(torch.tensor(2.0))
+
+    P[0, 0] = 1
+    if N % 2 == 0:
+        P[N // 2, N // 2] = 1
+    return P

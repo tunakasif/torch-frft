@@ -2,7 +2,7 @@ import pytest
 import scipy
 import torch
 
-from torch_frft.dfrft import cconvm, conv, creates, dfrft_index, dFRT
+from torch_frft.dfrft import cconvm, conv, createp, creates, dfrft_index, dFRT
 
 
 def test_dfrft() -> None:
@@ -118,6 +118,36 @@ def test_creates() -> None:
     assert torch.allclose(creates(4, approx_order=2), excepted_N4o2, atol=tol)
     assert torch.allclose(creates(6, approx_order=2), excepted_N6o2, atol=tol)
     assert torch.allclose(creates(6, approx_order=4), excepted_N6o4, atol=tol)
+
+
+def test_createp() -> None:
+    with pytest.raises(ValueError):
+        createp(0)
+    assert torch.allclose(createp(1), torch.tensor([1.0]))
+    assert torch.allclose(createp(2), torch.eye(2, dtype=torch.float32))
+    assert torch.allclose(
+        createp(3),
+        torch.tensor(
+            [
+                [1.0, 0, 0],
+                [0, 0.707106781186547, 0.707106781186547],
+                [0, 0.707106781186547, -0.707106781186547],
+            ]
+        ),
+        atol=1e-5,
+    )
+    assert torch.allclose(
+        createp(4),
+        torch.tensor(
+            [
+                [1, 0, 0, 0],
+                [0, 0.707106781186547, 0, 0.707106781186547],
+                [0, 0, 1, 0],
+                [0, 0.707106781186547, 0, -0.707106781186547],
+            ]
+        ),
+        atol=1e-5,
+    )
 
 
 def test_conv() -> None:
