@@ -4,22 +4,30 @@ import pytest
 import scipy
 import torch
 
-from torch_frft.dfrft import cconvm, conv, createp, creates, dfrft_index, dFRT, dis_s
+from torch_frft.dfrft import (
+    _circulant,
+    _conv1d_full,
+    _create_hamiltonian,
+    _create_odd_even_decomp_matrix,
+    _dfrft_index,
+    _get_dfrft_evecs,
+    dfrtmtx,
+)
 
 test_data_path = Path(__file__).parent.joinpath("data")
 
 
 def test_dfrft() -> None:
     with pytest.raises(ValueError):
-        dFRT(-5, 1.0)
+        dfrtmtx(-5, 1.0)
     with pytest.raises(ValueError):
-        dFRT(0, 1.0)
+        dfrtmtx(0, 1.0)
     with pytest.raises(ValueError):
-        dFRT(4, 1.0, approx_order=1)
+        dfrtmtx(4, 1.0, approx_order=1)
 
     tol = 1e-4
     assert torch.allclose(
-        dFRT(4, 0.5),
+        dfrtmtx(4, 0.5),
         torch.tensor(
             [
                 [
@@ -52,7 +60,7 @@ def test_dfrft() -> None:
         atol=tol,
     )
     assert torch.allclose(
-        dFRT(5, 1.5),
+        dfrtmtx(5, 1.5),
         torch.tensor(
             [
                 [
@@ -114,21 +122,21 @@ def test_large_dfrft() -> None:
         N = int(mat_data["N"])
         a = float(mat_data["a"])
         X = torch.tensor(mat_data["matrix"], dtype=torch.complex64)
-        assert torch.allclose(dFRT(N, a), X, atol=tol)
+        assert torch.allclose(dfrtmtx(N, a), X, atol=tol)
 
 
 def test_dfrft_index() -> None:
     with pytest.raises(ValueError):
-        dfrft_index(-2)
+        _dfrft_index(-2)
     with pytest.raises(ValueError):
-        dfrft_index(0)
+        _dfrft_index(0)
 
-    assert dfrft_index(1).tolist() == [0]
-    assert dfrft_index(2).tolist() == [0, 2]
-    assert dfrft_index(3).tolist() == [0, 1, 2]
-    assert dfrft_index(4).tolist() == [0, 1, 2, 4]
-    assert dfrft_index(100).tolist() == list(range(99)) + [100]
-    assert dfrft_index(101).tolist() == list(range(101))
+    assert _dfrft_index(1).tolist() == [0]
+    assert _dfrft_index(2).tolist() == [0, 2]
+    assert _dfrft_index(3).tolist() == [0, 1, 2]
+    assert _dfrft_index(4).tolist() == [0, 1, 2, 4]
+    assert _dfrft_index(100).tolist() == list(range(99)) + [100]
+    assert _dfrft_index(101).tolist() == list(range(101))
 
 
 def test_circulant() -> None:
@@ -144,9 +152,9 @@ def test_circulant() -> None:
         dtype=torch.float32,
     )
 
-    assert torch.allclose(cconvm(vector), excepted)
+    assert torch.allclose(_circulant(vector), excepted)
     assert torch.allclose(
-        cconvm(random_vector),
+        _circulant(random_vector),
         torch.tensor(scipy.linalg.circulant(random_vector), dtype=torch.float32),
     )
 
@@ -221,21 +229,21 @@ def test_creates() -> None:
 
     tol = 1e-5
     with pytest.raises(ValueError):
-        creates(0)
+        _create_hamiltonian(0)
     with pytest.raises(ValueError):
-        creates(4, approx_order=1)
-    assert torch.allclose(creates(4, approx_order=2), excepted_N4o2, atol=tol)
-    assert torch.allclose(creates(6, approx_order=2), excepted_N6o2, atol=tol)
-    assert torch.allclose(creates(6, approx_order=4), excepted_N6o4, atol=tol)
+        _create_hamiltonian(4, approx_order=1)
+    assert torch.allclose(_create_hamiltonian(4, approx_order=2), excepted_N4o2, atol=tol)
+    assert torch.allclose(_create_hamiltonian(6, approx_order=2), excepted_N6o2, atol=tol)
+    assert torch.allclose(_create_hamiltonian(6, approx_order=4), excepted_N6o4, atol=tol)
 
 
 def test_createp() -> None:
     with pytest.raises(ValueError):
-        createp(0)
-    assert torch.allclose(createp(1), torch.tensor([1.0]))
-    assert torch.allclose(createp(2), torch.eye(2, dtype=torch.float32))
+        _create_odd_even_decomp_matrix(0)
+    assert torch.allclose(_create_odd_even_decomp_matrix(1), torch.tensor([1.0]))
+    assert torch.allclose(_create_odd_even_decomp_matrix(2), torch.eye(2, dtype=torch.float32))
     assert torch.allclose(
-        createp(3),
+        _create_odd_even_decomp_matrix(3),
         torch.tensor(
             [
                 [1.0, 0, 0],
@@ -246,7 +254,7 @@ def test_createp() -> None:
         atol=1e-5,
     )
     assert torch.allclose(
-        createp(4),
+        _create_odd_even_decomp_matrix(4),
         torch.tensor(
             [
                 [1, 0, 0, 0],
@@ -261,7 +269,7 @@ def test_createp() -> None:
 
 def test_conv() -> None:
     assert torch.allclose(
-        conv(
+        _conv1d_full(
             torch.tensor([1, 2, 3, 4], dtype=torch.float32),
             torch.tensor([1, -1, 2], dtype=torch.float32),
         ),
@@ -269,7 +277,7 @@ def test_conv() -> None:
     )
 
     assert torch.allclose(
-        conv(
+        _conv1d_full(
             torch.tensor([1, 1, 1, 1], dtype=torch.float32),
             torch.tensor([-2, 0, 5], dtype=torch.float32),
         ),
@@ -280,7 +288,7 @@ def test_conv() -> None:
 def test_dis_s() -> None:
     tol = 1e-5
     assert torch.allclose(
-        dis_s(3),
+        _get_dfrft_evecs(3),
         torch.tensor(
             [
                 [-0.888073833977115, 0, 0.459700843380983],
@@ -291,7 +299,7 @@ def test_dis_s() -> None:
         atol=tol,
     )
     assert torch.allclose(
-        dis_s(4),
+        _get_dfrft_evecs(4),
         torch.tensor(
             [
                 [0.853553390593274, 0, 0.5, 0.146446609406726],
@@ -303,7 +311,7 @@ def test_dis_s() -> None:
         atol=tol,
     )
     assert torch.allclose(
-        dis_s(8),
+        _get_dfrft_evecs(8),
         torch.tensor(
             [
                 [
