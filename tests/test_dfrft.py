@@ -10,6 +10,8 @@ def test_dfrft() -> None:
         dFRT(-5, 1.0)
     with pytest.raises(ValueError):
         dFRT(0, 1.0)
+    with pytest.raises(ValueError):
+        dFRT(4, 1.0, approx_order=1)
 
 
 def test_dfrft_index() -> None:
@@ -115,6 +117,10 @@ def test_creates() -> None:
     )
 
     tol = 1e-5
+    with pytest.raises(ValueError):
+        creates(0)
+    with pytest.raises(ValueError):
+        creates(4, approx_order=1)
     assert torch.allclose(creates(4, approx_order=2), excepted_N4o2, atol=tol)
     assert torch.allclose(creates(6, approx_order=2), excepted_N6o2, atol=tol)
     assert torch.allclose(creates(6, approx_order=4), excepted_N6o4, atol=tol)

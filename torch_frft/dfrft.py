@@ -16,7 +16,7 @@ def dFRT(
 def dfrft_index(N: int, device: torch.device = torch.device("cpu")) -> torch.Tensor:
     if N < 1:
         raise ValueError("N must be positive integer.")
-    shift = 1 if N % 2 == 0 else 0
+    shift = 1 - (N % 2)  # 1 if N is even, 0 if N is odd
     last_entry = torch.tensor(N - 1 + shift, device=device)
     return torch.cat(
         (
