@@ -11,7 +11,7 @@ from torch_frft.dfrft import (
     _create_odd_even_decomp_matrix,
     _dfrft_index,
     _get_dfrft_evecs,
-    dfrtmtx,
+    dfrftmtx,
 )
 
 test_data_path = Path(__file__).parent.joinpath("data")
@@ -19,15 +19,15 @@ test_data_path = Path(__file__).parent.joinpath("data")
 
 def test_dfrft() -> None:
     with pytest.raises(ValueError):
-        dfrtmtx(-5, 1.0)
+        dfrftmtx(-5, 1.0)
     with pytest.raises(ValueError):
-        dfrtmtx(0, 1.0)
+        dfrftmtx(0, 1.0)
     with pytest.raises(ValueError):
-        dfrtmtx(4, 1.0, approx_order=1)
+        dfrftmtx(4, 1.0, approx_order=1)
 
     tol = 1e-4
     assert torch.allclose(
-        dfrtmtx(4, 0.5),
+        dfrftmtx(4, 0.5),
         torch.tensor(
             [
                 [
@@ -60,7 +60,7 @@ def test_dfrft() -> None:
         atol=tol,
     )
     assert torch.allclose(
-        dfrtmtx(5, 1.5),
+        dfrftmtx(5, 1.5),
         torch.tensor(
             [
                 [
@@ -122,7 +122,7 @@ def test_large_dfrft() -> None:
         N = int(mat_data["N"])
         a = float(mat_data["a"])
         X = torch.tensor(mat_data["matrix"], dtype=torch.complex64)
-        assert torch.allclose(dfrtmtx(N, a), X, atol=tol)
+        assert torch.allclose(dfrftmtx(N, a), X, atol=tol)
 
 
 def test_dfrft_index() -> None:

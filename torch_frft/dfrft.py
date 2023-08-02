@@ -3,7 +3,21 @@ from math import ceil
 import torch
 
 
-def dfrtmtx(
+def dfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
+    dfrft_matrix = dfrftmtx(x.size(dim), a, device=x.device)
+    return torch.einsum(_get_dfrft_einsum_str(len(x.shape), dim), dfrft_matrix, x)
+
+
+def _get_dfrft_einsum_str(dim_count: int, req_dim: int) -> str:
+    if req_dim < -dim_count or req_dim >= dim_count:
+        raise ValueError("Dimension size error.")
+    dim = torch.remainder(req_dim, torch.tensor(dim_count))
+    diff = dim_count - dim
+    remaining_str = "".join([chr(num) for num in range(98, 98 + diff)])
+    return f"ab,...{remaining_str}->...{remaining_str}"
+
+
+def dfrftmtx(
     N: int,
     a: float,
     *,
