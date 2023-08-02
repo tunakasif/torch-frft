@@ -9,7 +9,12 @@ def idfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
 
 def dfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
     dfrft_matrix = dfrftmtx(x.size(dim), a, device=x.device)
-    return torch.einsum(_get_dfrft_einsum_str(len(x.shape), dim), dfrft_matrix, x)
+    dtype = torch.promote_types(dfrft_matrix.dtype, x.dtype)
+    return torch.einsum(
+        _get_dfrft_einsum_str(len(x.shape), dim),
+        dfrft_matrix.type(dtype),
+        x.type(dtype),
+    )
 
 
 def _get_dfrft_einsum_str(dim_count: int, req_dim: int) -> str:
@@ -18,7 +23,7 @@ def _get_dfrft_einsum_str(dim_count: int, req_dim: int) -> str:
     dim = torch.remainder(req_dim, torch.tensor(dim_count))
     diff = dim_count - dim
     remaining_str = "".join([chr(num) for num in range(98, 98 + diff)])
-    return f"ab,...{remaining_str}->...{remaining_str}"
+    return f"ab,...{remaining_str}->...{remaining_str.replace('b', 'a', 1)}"
 
 
 def idfrftmtx(
