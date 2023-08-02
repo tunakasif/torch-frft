@@ -1,3 +1,5 @@
+from math import ceil
+
 import torch
 
 
@@ -11,6 +13,46 @@ def dFRT(
     if N < 1 or approx_order < 2:
         raise ValueError("Necessary conditions for integers: N > 1 and approx_order >= 2.")
     return None
+
+
+def dis_s(
+    N: int,
+    *,
+    approx_order: int = 2,
+    device: torch.device = torch.device("cpu"),
+) -> torch.Tensor:
+    if N < 1 or approx_order < 2:
+        raise ValueError("Necessary conditions for integers: N > 1 and approx_order >= 2.")
+    S = creates(N, approx_order=approx_order, device=device)
+    P = createp(N, device=device)
+
+    CS = torch.einsum("ij,jk,lk->il", P, S, P)
+    C2 = CS[: N // 2 + 1, : N // 2 + 1]
+    S2 = CS[N // 2 + 1 :, N // 2 + 1 :]
+
+    ec, VC = torch.linalg.eigh(C2)  # ascending order
+    es, VS = torch.linalg.eigh(S2)  # ascending order
+
+    N0, N1 = ceil(N / 2 - 1), N // 2 + 1
+    qvc = torch.cat((VC, torch.zeros((N0, N1), device=device)))
+    qvs = torch.cat((torch.zeros((N1, N0), device=device), VS))
+
+    SC2 = torch.matmul(P, qvc).flip(-1)  # descending order
+    SS2 = torch.matmul(P, qvs).flip(-1)  # descending order
+
+    if N % 2 == 0:
+        evec = torch.zeros(N, N + 1)
+        SS2_new = torch.hstack(
+            (SS2, torch.zeros((SS2.size(0), 1), dtype=SS2.dtype, device=SS2.device))
+        )
+        evec[:, : N + 1 : 2] = SC2
+        evec[:, 1:N:2] = SS2_new
+        evec = torch.hstack((evec[:, : N - 1], evec[:, -1].unsqueeze(-1)))
+    else:
+        evec = torch.zeros(N, N)
+        evec[:, : N + 1 : 2] = SC2
+        evec[:, 1:N:2] = SS2
+    return evec
 
 
 def dfrft_index(N: int, device: torch.device = torch.device("cpu")) -> torch.Tensor:
