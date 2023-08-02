@@ -9,10 +9,14 @@ def dFRT(
     *,
     approx_order: int = 2,
     device: torch.device = torch.device("cpu"),
-) -> torch.Tensor | None:
+) -> torch.Tensor:
     if N < 1 or approx_order < 2:
         raise ValueError("Necessary conditions for integers: N > 1 and approx_order >= 2.")
-    return None
+    evec = dis_s(N, approx_order=approx_order, device=device).type(torch.complex64)
+    idx = dfrft_index(N, device=device)
+    eval = torch.exp(-1j * a * (torch.pi / 2) * idx).type(torch.complex64)
+    dfrft_matrix = torch.einsum("ij,j,kj->ik", evec, eval, evec)
+    return dfrft_matrix
 
 
 def dis_s(
