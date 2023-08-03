@@ -1,6 +1,6 @@
 import torch
 
-from torch_frft.dfrft import dfrft, dfrftmtx
+from torch_frft.dfrft_module import dfrft, dfrftmtx
 
 
 def test_dfrft2D() -> None:

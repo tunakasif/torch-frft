@@ -3,7 +3,7 @@ from pathlib import Path
 import scipy
 import torch
 
-from torch_frft.frft import frft
+from torch_frft.frft_module import frft
 
 test_data_path = Path(__file__).parent.joinpath("data")
 X = torch.tensor(

@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from torch_frft.frft import _bizdec, _bizinter, _corefrmod2, _dflip, frft
+from torch_frft.frft_module import _bizdec, _bizinter, _corefrmod2, _dflip, frft
 
 
 def test_dflip_1d() -> None:

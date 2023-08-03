@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from torch_frft.frft import _bizdec, _bizinter, _corefrmod2, _get_mul_dim_einstr, _upsample2
+from torch_frft.frft_module import _bizdec, _bizinter, _corefrmod2, _get_mul_dim_einstr, _upsample2
 
 X = torch.tensor(
     [

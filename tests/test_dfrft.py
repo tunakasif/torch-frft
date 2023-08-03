@@ -4,7 +4,7 @@ import pytest
 import scipy
 import torch
 
-from torch_frft.dfrft import (
+from torch_frft.dfrft_module import (
     _circulant,
     _conv1d_full,
     _create_hamiltonian,
