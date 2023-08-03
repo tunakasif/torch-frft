@@ -78,7 +78,7 @@ def _get_dfrft_evecs(
     SS2 = torch.matmul(P, qvs).flip(-1)  # descending order
 
     if N % 2 == 0:
-        evecs = torch.zeros(N, N + 1)
+        evecs = torch.zeros(N, N + 1, device=device)
         SS2_new = torch.hstack(
             (SS2, torch.zeros((SS2.size(0), 1), dtype=SS2.dtype, device=SS2.device))
         )
@@ -86,7 +86,7 @@ def _get_dfrft_evecs(
         evecs[:, 1:N:2] = SS2_new
         evecs = torch.hstack((evecs[:, : N - 1], evecs[:, -1].unsqueeze(-1)))
     else:
-        evecs = torch.zeros(N, N)
+        evecs = torch.zeros(N, N, device=device)
         evecs[:, : N + 1 : 2] = SC2
         evecs[:, 1:N:2] = SS2
     return evecs

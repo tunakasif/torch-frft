@@ -29,7 +29,9 @@ def frft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Ten
         return fftshift(ifft(fftshift(fc), dim=dim, norm="ortho"))
 
     biz = _bizinter(fc, dim=dim)
-    zeros = torch.zeros_like(biz).index_select(dim, torch.arange(0, N))
+    zeros = torch.zeros_like(biz, device=fc.device).index_select(
+        dim, torch.arange(0, N, device=fc.device)
+    )
     fc = torch.cat([zeros, biz, zeros], dim=dim)
 
     res = fc
@@ -42,13 +44,13 @@ def frft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Ten
         a += 1
 
     res = _corefrmod2(res, a, dim=dim)
-    res = torch.index_select(res, dim=dim, index=torch.arange(N, 3 * N))
+    res = torch.index_select(res, dim=dim, index=torch.arange(N, 3 * N, device=fc.device))
     res = _bizdec(res, dim=dim)
 
     # Double the first entry of the vector in the given dimension,
     # res[0] *= 2 in n-dimensional case, i.e., Hadamard product with
     # [2, 1, 1, ..., 1] along n-th axis.
-    first_entry_doubler_vec = torch.ones(res.size(dim))
+    first_entry_doubler_vec = torch.ones(res.size(dim), device=fc.device)
     first_entry_doubler_vec[0] = 2
     res = _vecmul_ndim(res, first_entry_doubler_vec, dim=dim)
     return res
@@ -60,7 +62,7 @@ def _dflip(tensor: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
 
 
 def _bizdec(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
-    k = torch.arange(0, x.size(dim), 2)
+    k = torch.arange(0, x.size(dim), 2, device=x.device)
     return x.index_select(dim, k)
 
 
@@ -78,13 +80,13 @@ def _bizinter_real(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
 
     upsampled = _upsample2(x, dim=dim)
     xf = fft(upsampled, dim=dim)
-    xf = torch.index_fill(xf, dim, torch.arange(N1, N2), 0)
+    xf = torch.index_fill(xf, dim, torch.arange(N1, N2, device=x.device), 0)
     return 2 * torch.real(ifft(xf, dim=dim))
 
 
 def _upsample2(x: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     upsampled = x.repeat_interleave(2, dim=dim)
-    idx = torch.arange(1, upsampled.size(dim), 2)
+    idx = torch.arange(1, upsampled.size(dim), 2, device=x.device)
     return torch.index_fill(upsampled, dim, idx, 0)
 
 
@@ -93,7 +95,7 @@ def _corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torc
     N = signal.size(dim)
     Nend = N // 2
     Nstart = -(N % 2 + Nend)
-    deltax = torch.sqrt(torch.tensor(N))
+    deltax = torch.sqrt(torch.tensor(N, device=signal.device))
 
     phi = a * torch.pi / 2
     alpha = -1j * torch.pi * torch.tan(phi / 2)
@@ -104,12 +106,12 @@ def _corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torc
     Aphi = Aphi_num / Aphi_denum
 
     # Chirp Multiplication
-    x = torch.arange(Nstart, Nend) / deltax
+    x = torch.arange(Nstart, Nend, device=signal.device) / deltax
     chirp = torch.exp(alpha * x**2)
     multip = _vecmul_ndim(signal, chirp, dim=dim)
 
     # Chirp Convolution
-    t = torch.arange(-N + 1, N) / deltax
+    t = torch.arange(-N + 1, N, device=signal.device) / deltax
     hlptc = torch.exp(beta * t**2)
 
     N2 = hlptc.size(0)
@@ -122,7 +124,7 @@ def _corefrmod2(signal: torch.Tensor, a: torch.Tensor, *, dim: int = -1) -> torc
         ),
         dim=dim,
     )
-    Hc = torch.index_select(Hc, dim, torch.arange(N - 1, 2 * N - 1))
+    Hc = torch.index_select(Hc, dim, torch.arange(N - 1, 2 * N - 1, device=signal.device))
 
     # Chirp Multiplication
     result = _vecmul_ndim(Hc, Aphi * chirp, dim=dim) / deltax
