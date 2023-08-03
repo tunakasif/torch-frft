@@ -1,3 +1,29 @@
+## 0.4.0 (2023-08-03)
+
+### Feat
+
+- update sample training notebook
+- **layer**: add discrete transform version
+- add inverse wrappers for transforms
+- **ndim**: add `n`-dimensional `dfrft`
+- implement `dfrft` matrix
+- **dfrft**: implement `dis_s()` helper function
+- **discrete**: implement `P` construction
+- initialize `dfrft` implementation
+
+### Fix
+
+- allow `Tensor` type for `dfrft` order
+- **dfrft**: `ndim` implementation
+- **layer**: add dimension to `FrFT`
+
+### Refactor
+
+- filenames due to function names
+- **dfrft**: update naming convention
+- rename `fracF` to `frft`
+- change `trainable-frft` to `torch-frft`
+
 ## 0.3.0 (2023-07-31)
 
 ### Feat
