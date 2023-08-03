@@ -22,4 +22,4 @@ class DFrFTLayer(nn.Module):
         self.dim = dim
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return dfrft(x, self.order.item(), dim=self.dim)
+        return dfrft(x, self.order, dim=self.dim)

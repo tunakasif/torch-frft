@@ -3,11 +3,11 @@ from math import ceil
 import torch
 
 
-def idfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
+def idfrft(x: torch.Tensor, a: float | torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     return dfrft(x, -a, dim=dim)
 
 
-def dfrft(x: torch.Tensor, a: float, *, dim: int = -1) -> torch.Tensor:
+def dfrft(x: torch.Tensor, a: float | torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     dfrft_matrix = dfrftmtx(x.size(dim), a, device=x.device)
     dtype = torch.promote_types(dfrft_matrix.dtype, x.dtype)
     return torch.einsum(
@@ -28,7 +28,7 @@ def _get_dfrft_einsum_str(dim_count: int, req_dim: int) -> str:
 
 def idfrftmtx(
     N: int,
-    a: float,
+    a: float | torch.Tensor,
     *,
     approx_order: int = 2,
     device: torch.device = torch.device("cpu"),
@@ -38,7 +38,7 @@ def idfrftmtx(
 
 def dfrftmtx(
     N: int,
-    a: float,
+    a: float | torch.Tensor,
     *,
     approx_order: int = 2,
     device: torch.device = torch.device("cpu"),
