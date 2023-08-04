@@ -61,15 +61,17 @@ import torch
 from torch_frft.frft_module import frft
 from torch_frft.dfrft_module import dfrft, dfrftmtx
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 N = 128
-a = 0.5
+a = torch.tensor(0.5, dtype=torch.float32)
 X = torch.rand(N, N)
-Y1 = frft(X, a) # equivalent to dim=-1
+Y1 = frft(X, a)  # equivalent to dim=-1
 Y2 = frft(X, a, dim=0)
 
 # 2D FRFT
-a0 = 1.25
-a1 = 0.75
+a0 = torch.tensor(1.25, dtype=torch.float32)
+a1 = torch.tensor(0.75, dtype=torch.float32)
 Y3 = frft(frft(X, a0, dim=0), a1, dim=1)
 ```
 
