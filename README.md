@@ -13,6 +13,20 @@ This package implements these approaches in PyTorch with certain optimazations a
 
 With the implemented transforms basic layers that extend `torch.nn.Module` is provided, an example of the custom layer implementation is also provided in [`README.md`](#custom-layers) file.
 
+## Table of Contents
+
+- [Trainable Fractional Fourier Transform](#trainable-fractional-fourier-transform)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+    - [For Usage](#for-usage)
+      - [Using `pip`](#using-pip)
+      - [Using `poetry`](#using-poetry)
+    - [For Development](#for-development)
+  - [Usage](#usage)
+    - [Transforms](#transforms)
+    - [Pre-configured Layers](#pre-configured-layers)
+    - [Custom Layers](#custom-layers)
+
 ## Installation
 
 ### For Usage
@@ -72,14 +86,13 @@ from torch_frft.dfrft_module import dfrft, dfrftmtx
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 N = 128
-a = torch.tensor(0.5, dtype=torch.float32)
+a = 0.5
 X = torch.rand(N, N, device=device)
 Y1 = frft(X, a)  # equivalent to dim=-1
 Y2 = frft(X, a, dim=0)
 
 # 2D FRFT
-a0 = torch.tensor(1.25, dtype=torch.float32)
-a1 = torch.tensor(0.75, dtype=torch.float32)
+a0, a1 = 1.25, 0.75
 Y3 = frft(frft(X, a0, dim=0), a1, dim=1)
 ```
 
@@ -90,6 +103,8 @@ The package also provides two differentiable FRFT layers, `FrFTLayer` and `DFrFT
 ```python
 import torch
 import torch.nn as nn
+
+from torch_frft.dfrft_module import dfrft
 from torch_frft.layer import DFrFTLayer, FrFTLayer
 
 # FRFT with initial order 1.25, operating on the last dimension
@@ -104,11 +119,12 @@ Then, the simplest toy example to train the layer is as follows:
 ```python
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 num_samples, seq_length = 100, 16
-a_original = torch.tensor(1.1, dtype=torch.float32)
+a_original = 1.1
+a_initial = 1.25
 X = torch.randn(num_samples, seq_length, dtype=torch.float32, device=device)
 Y = dfrft(X, a_original)
 
-model = nn.Sequential(DFrFTLayer(order=1.25))
+model = DFrFTLayer(order=a_initial).to(device)
 optim = torch.optim.Adam(model.parameters(), lr=1e-3)
 epochs = 1000
 
@@ -119,7 +135,31 @@ for epoch in range(1 + epochs):
     optim.step()
 
 print("Original  a:", a_original)
-print("Estimated a:", model[0].order)
+print("Estimated a:", model.order.item())
+```
+
+Note that you can also place these layers directly into `torch.nn.Sequential`. Remark that these transforms generate complex-valued outputs, so you may need to convert them to real-valued outputs, e.g., taking the real part, absolute value, etc. For example, the following code snippet implements a simple fully-connected network with real parts of `FrFTLayer` and `DFrFTLayer` in between:
+
+```python
+class Real(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x.real
+
+
+model = nn.Sequential(
+    nn.Linear(16, 6),
+    nn.ReLU(),
+    DFrFTLayer(1.35, dim=-1),
+    Real(),
+    nn.ReLU(),
+    nn.Linear(6, 1),
+    FrFTLayer(0.65, dim=0),
+    Real(),
+    nn.ReLU(),
+)
 ```
 
 ### Custom Layers
