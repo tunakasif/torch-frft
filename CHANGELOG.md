@@ -1,3 +1,12 @@
+## 0.4.1 (2023-08-07)
+
+### Fix
+
+- allow `float` order for `frft()`
+- **layer**: add `__repr__` for frft layers
+- gradient error of `frft()` for integer orders
+- `gpu` utilization
+
 ## 0.4.0 (2023-08-03)
 
 ### Feat
