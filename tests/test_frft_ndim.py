@@ -20,7 +20,7 @@ X = torch.tensor(
 
 def test_frft_along_dims() -> None:
     global X
-    a = torch.tensor(0.75)
+    a = 0.75
     expected_dim0 = torch.tensor(
         [
             [
@@ -104,8 +104,8 @@ def test_frft_along_dims() -> None:
 
 def test_frftn() -> None:
     global X
-    a0 = torch.tensor(0.80)
-    a1 = torch.tensor(1.25)
+    a0 = 0.80
+    a1 = 1.25
     expected = torch.tensor(
         [
             [
@@ -152,19 +152,17 @@ def test_frftn() -> None:
 
 def test_base_case() -> None:
     X = torch.rand(1000, 1000, dtype=torch.complex64)
-    one = torch.tensor(1.0)
-    two = torch.tensor(2.0)
 
     torch.allclose(
-        frft(frft(X, one, dim=0), one, dim=1),
+        frft(frft(X, 1.0, dim=0), 1.0, dim=1),
         torch.fft.fftn(X, norm="ortho"),
     )
     torch.allclose(
-        frft(frft(X, -one, dim=0), -one, dim=1),
+        frft(frft(X, -1.0, dim=0), -1.0, dim=1),
         torch.fft.ifftn(X, norm="ortho"),
     )
     torch.allclose(
-        frft(frft(X, two, dim=0), two, dim=1),
+        frft(frft(X, 2.0, dim=0), 2.0, dim=1),
         torch.fft.fftn(torch.fft.fftn(X, norm="ortho"), norm="ortho"),
     )
 

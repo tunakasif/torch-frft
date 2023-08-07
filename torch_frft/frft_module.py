@@ -2,16 +2,18 @@ import torch
 from torch.fft import fft, ifft
 
 
-def ifrft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+def ifrft(fc: torch.Tensor, a_param: float | torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     return frft(fc, -a_param, dim=dim)
 
 
-def frft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+def frft(fc: torch.Tensor, a_param: float | torch.Tensor, *, dim: int = -1) -> torch.Tensor:
     N = fc.size(dim)
     if N % 2 == 1:
         raise ValueError("signal size must be even")
 
     # 4-modulation and shifting to [-2, 2] interval
+    if not isinstance(a_param, torch.Tensor):
+        a_param = torch.tensor(a_param)
     a = torch.fmod(a_param, 4)
     if a > 2:
         a -= 4

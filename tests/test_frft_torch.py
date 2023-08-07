@@ -174,12 +174,12 @@ def test_frft_arange() -> None:
     )
 
     tol = 1e-4
-    assert torch.allclose(frft(x, torch.tensor(0.3)), a03_expected, atol=tol)
-    assert torch.allclose(frft(x, torch.tensor(0.5)), a05_expected, atol=tol)
-    assert torch.allclose(frft(x, torch.tensor(0.7)), a07_expected, atol=tol)
-    assert torch.allclose(frft(x, torch.tensor(1.0)), a10_expected, atol=tol)
-    assert torch.allclose(frft(x, torch.tensor(2.5)), a25_expected, atol=tol)
-    assert torch.allclose(frft(x, torch.tensor(-2.5)), a_neg25_expected, atol=tol)
+    assert torch.allclose(frft(x, 0.3), a03_expected, atol=tol)
+    assert torch.allclose(frft(x, 0.5), a05_expected, atol=tol)
+    assert torch.allclose(frft(x, 0.7), a07_expected, atol=tol)
+    assert torch.allclose(frft(x, 1.0), a10_expected, atol=tol)
+    assert torch.allclose(frft(x, 2.5), a25_expected, atol=tol)
+    assert torch.allclose(frft(x, -2.5), a_neg25_expected, atol=tol)
 
 
 def test_frft_integer() -> None:
@@ -193,22 +193,22 @@ def test_frft_integer() -> None:
 
     assert torch.allclose(frft(x, torch.tensor(0.0)), x, atol=tol)
     assert torch.allclose(
-        frft(x, torch.tensor(1.0)),
+        frft(x, 1.0),
         fftshift(fft(fftshift(x))) / sqrtN,
         atol=tol,
     )
     assert torch.allclose(
-        frft(x, torch.tensor(-1.0)),
+        frft(x, -1.0),
         fftshift(ifft(fftshift(x))) * sqrtN,
         atol=tol,
     )
     assert torch.allclose(
-        frft(x, torch.tensor(2.0)).to(torch.complex64),
+        frft(x, 2.0).to(torch.complex64),
         fftshift(fft(fft(fftshift(x)))) / torch.tensor(N),
         atol=tol,
     )
     assert torch.allclose(
-        frft(x, torch.tensor(-2.0)).to(torch.complex64),
+        frft(x, -2.0).to(torch.complex64),
         fftshift(ifft(ifft(fftshift(x)))) * torch.tensor(N),
         atol=tol,
     )
