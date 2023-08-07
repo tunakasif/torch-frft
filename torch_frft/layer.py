@@ -11,6 +11,9 @@ class FrFTLayer(nn.Module):
         self.order = nn.Parameter(torch.tensor(order, dtype=torch.float32))
         self.dim = dim
 
+    def __repr__(self) -> str:
+        return f"FrFTLayer(order={self.order.item()}, dim={self.dim})"
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return frft(x, self.order, dim=self.dim)
 
@@ -20,6 +23,9 @@ class DFrFTLayer(nn.Module):
         super().__init__()
         self.order = nn.Parameter(torch.tensor(order, dtype=torch.float32))
         self.dim = dim
+
+    def __repr__(self) -> str:
+        return f"DFrFTLayer(order={self.order.item()}, dim={self.dim})"
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return dfrft(x, self.order, dim=self.dim)
