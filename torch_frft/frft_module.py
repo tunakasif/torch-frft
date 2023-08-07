@@ -1,5 +1,5 @@
 import torch
-from torch.fft import fft, fftshift, ifft
+from torch.fft import fft, ifft
 
 
 def ifrft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Tensor:
@@ -18,15 +18,11 @@ def frft(fc: torch.Tensor, a_param: torch.Tensor, *, dim: int = -1) -> torch.Ten
     elif a < -2:
         a += 4
 
-    # special integer cases
+    # special integer cases with zero gradient, hence the a * zeros
     if a == 0.0:
-        return fc
+        return fc + a * torch.zeros_like(fc, device=fc.device)
     elif a == 2.0 or a == -2.0:
-        return _dflip(fc, dim=dim)
-    elif a == 1.0:
-        return fftshift(fft(fftshift(fc), dim=dim, norm="ortho"))
-    elif a == -1.0:
-        return fftshift(ifft(fftshift(fc), dim=dim, norm="ortho"))
+        return _dflip(fc, dim=dim) + a * torch.zeros_like(fc, device=fc.device)
 
     biz = _bizinter(fc, dim=dim)
     zeros = torch.zeros_like(biz, device=fc.device).index_select(
