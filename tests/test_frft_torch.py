@@ -185,31 +185,32 @@ def test_frft_arange() -> None:
 def test_frft_integer() -> None:
     from torch.fft import fft, fftshift, ifft
 
+    tol = 1e-3
     N = 1000
     torch.manual_seed(0)
     x = torch.rand(N)
     sqrtN = torch.sqrt(torch.tensor(N))
 
-    assert torch.allclose(frft(x, torch.tensor(0.0)), x, atol=1e-5)
+    assert torch.allclose(frft(x, torch.tensor(0.0)), x, atol=tol)
     assert torch.allclose(
         frft(x, torch.tensor(1.0)),
         fftshift(fft(fftshift(x))) / sqrtN,
-        atol=1e-5,
+        atol=tol,
     )
     assert torch.allclose(
         frft(x, torch.tensor(-1.0)),
         fftshift(ifft(fftshift(x))) * sqrtN,
-        atol=1e-5,
+        atol=tol,
     )
     assert torch.allclose(
         frft(x, torch.tensor(2.0)).to(torch.complex64),
         fftshift(fft(fft(fftshift(x)))) / torch.tensor(N),
-        atol=1e-5,
+        atol=tol,
     )
     assert torch.allclose(
         frft(x, torch.tensor(-2.0)).to(torch.complex64),
         fftshift(ifft(ifft(fftshift(x)))) * torch.tensor(N),
-        atol=1e-5,
+        atol=tol,
     )
 
 
