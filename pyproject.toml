@@ -57,6 +57,7 @@ version = "0.4.1"
 version_files = [
     "pyproject.toml:^version",
     "torch_frft/__init__.py:__version__",
+    "CITATION.cff:^version",
 ]
 major_version_zero = true
 update_changelog_on_bump = true

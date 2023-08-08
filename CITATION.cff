@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Alikaşifoğlu"
+    given-names: "Tuna"
+    orcid: "https://orcid.org/0000-0001-8030-8088"
+title: "PyTorch Differentiable Fractional Fourier Transform"
+version: 0.4.1
+date-released: 2023-08-08
+url: "https://github.com/tunakasif/torch-frft"
