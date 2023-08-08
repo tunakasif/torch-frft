@@ -183,11 +183,11 @@ class CustomLayer(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x1 = dfrft(x, self.order, dim=self.dim)
         a1 = nn.ReLU()(x1.real) + 1j * nn.ReLU()(x1.imag)
-        x2 = nn.Linear(self.in_features, self.in_features, dtype=a1.dtype)(a1)
+        x2 = nn.Linear(self.in_features, self.in_features, dtype=a1.dtype, device=x.device)(a1)
         a2 = nn.ReLU()(x2.real) + 1j * nn.ReLU()(x2.imag)
         x3 = dfrft(a2, -self.order, dim=self.dim)
         a3 = nn.ReLU()(x3.real) + 1j * nn.ReLU()(x3.imag)
-        x4 = nn.Linear(self.in_features, self.out_features, dtype=a3.dtype)(a3)
+        x4 = nn.Linear(self.in_features, self.out_features, dtype=a3.dtype, device=x.device)(a3)
         a4 = nn.ReLU()(x4.real)
         return a4
 ```
