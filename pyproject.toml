@@ -24,6 +24,7 @@ tox = "^4.6.0"
 commitizen = "^3.2.2"
 ipykernel = "^6.23.1"
 ipython = "^8.14.0"
+ruff = "^0.0.284"
 
 [tool.poetry.group.security.dependencies]
 bandit = "^1.7.5"

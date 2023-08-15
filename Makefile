@@ -17,6 +17,7 @@ format:
 	$(EXECUTER) black --diff --check --color .
 
 lint:
+	$(EXECUTER) ruff check .
 	$(EXECUTER) mypy .
 	$(EXECUTER) pyupgrade --py310-plus **/*.py
 
