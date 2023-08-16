@@ -6,9 +6,12 @@ from torch_frft.frft_module import frft
 
 
 class FrFTLayer(nn.Module):
-    def __init__(self, order: float = 1.0, *, dim: int = -1) -> None:
+    def __init__(self, order: float = 1.0, *, dim: int = -1, trainable: bool = True) -> None:
         super().__init__()
-        self.order = nn.Parameter(torch.tensor(order, dtype=torch.float32))
+        self.order = nn.Parameter(
+            torch.tensor(order, dtype=torch.float32),
+            requires_grad=trainable,
+        )
         self.dim = dim
 
     def __repr__(self) -> str:
@@ -19,9 +22,12 @@ class FrFTLayer(nn.Module):
 
 
 class DFrFTLayer(nn.Module):
-    def __init__(self, order: float = 1.0, *, dim: int = -1) -> None:
+    def __init__(self, order: float = 1.0, *, dim: int = -1, trainable: bool = True) -> None:
         super().__init__()
-        self.order = nn.Parameter(torch.tensor(order, dtype=torch.float32))
+        self.order = nn.Parameter(
+            torch.tensor(order, dtype=torch.float32),
+            requires_grad=trainable,
+        )
         self.dim = dim
 
     def __repr__(self) -> str:
