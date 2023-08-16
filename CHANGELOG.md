@@ -1,3 +1,9 @@
+## 0.5.0 (2023-08-16)
+
+### Feat
+
+- **layer**: add non-trainable option
+
 ## 0.4.1 (2023-08-07)
 
 ### Fix
