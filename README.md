@@ -2,6 +2,7 @@
 
 ![PyPI](https://img.shields.io/pypi/v/torch-frft)
 [![Tox & Bump Version](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml/badge.svg)](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml)
+![Codecov](https://img.shields.io/codecov/c/github/tunakasif/torch-frft)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/torch-frft)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/torch-frft)
 ![GitHub](https://img.shields.io/github/license/tunakasif/torch-frft)
