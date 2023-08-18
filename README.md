@@ -1,7 +1,10 @@
 # Trainable Fractional Fourier Transform
 
+![PyPI](https://img.shields.io/pypi/v/torch-frft)
 [![Tox & Bump Version](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml/badge.svg)](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml)
-[![Python Versions](https://img.shields.io/badge/python-3.10%20|%203.11-blue.svg)](https://img.shields.io/badge/python-3.10%20|%203.11-blue.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/torch-frft)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/torch-frft)
+![GitHub](https://img.shields.io/github/license/tunakasif/torch-frft)
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)
 
 A differentiable fractional Fourier transform (FRFT) implementation with layers that can be trained end-to-end with the rest of the network. This package provides implementations of both fast computation of continuous FRFT and discrete FRFT (DFRFT) and also provides pre-configured layers that can be used in neural networks.
