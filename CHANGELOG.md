@@ -1,3 +1,9 @@
+## 0.5.3 (2023-08-18)
+
+### Fix
+
+- **ci**: job dependency and naming
+
 ## 0.5.2 (2023-08-18)
 
 ### Fix
