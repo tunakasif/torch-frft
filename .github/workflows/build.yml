@@ -1,4 +1,4 @@
-name: tox
+name: Tox & Bump Version
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  tox:
     if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
     strategy:
@@ -31,6 +31,7 @@ jobs:
         run: tox
 
   bump-version:
+    needs: tox
     if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
     name: "Bump version and create changelog with commitizen"
