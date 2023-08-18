@@ -19,8 +19,6 @@ With the implemented transforms basic layers that extend `torch.nn.Module` is pr
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
     - [For Usage](#for-usage)
-      - [Using `pip`](#using-pip)
-      - [Using `poetry`](#using-poetry)
     - [For Development](#for-development)
   - [Usage](#usage)
     - [Transforms](#transforms)
@@ -31,34 +29,21 @@ With the implemented transforms basic layers that extend `torch.nn.Module` is pr
 
 ### For Usage
 
-This GitHub repository is `pip`/`poetry` installable. You can install the package using `pip` or `poetry` as follows:
-
-#### Using `pip`
+You can install the package directly from [`PYPI`](https://pypi.org/project/torch-frft/) using `pip` or `poetry` as follows:
 
 ```sh
 pip install torch-frft
 ```
 
-#### Using `poetry`
-
-Either run the following command:
+or
 
 ```sh
 poetry add torch-frft
 ```
 
-or add the following to your `pyproject.toml` file:
-
-```toml
-[tool.poetry.dependencies]
-torch-frft = {git = "github.com/tunakasif/torch-frft.git"}
-```
-
-For simplicity `https` version is provided, if you prefer you may also use the `ssh` version as well.
-
 ### For Development
 
-This codebase utilizes [`Poetry`](https://python-poetry.org) for package management. To install the dependencies, run:
+This codebase utilizes [`Poetry`](https://python-poetry.org) for package management. To install the dependencies:
 
 ```sh
 poetry install
