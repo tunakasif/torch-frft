@@ -1,3 +1,9 @@
+## 0.5.2 (2023-08-18)
+
+### Fix
+
+- **ci**: combine `tox` and `bump` into `build`
+
 ## 0.5.1 (2023-08-18)
 
 ### Fix
