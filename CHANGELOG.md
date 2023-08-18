@@ -1,3 +1,9 @@
+## 0.5.1 (2023-08-18)
+
+### Fix
+
+- add missing project description
+
 ## 0.5.0 (2023-08-16)
 
 ### Feat
