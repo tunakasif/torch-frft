@@ -1,12 +1,14 @@
 name: Bump version
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [tox]
+    types: [completed]
+    branches: [main]
+    
 
 jobs:
-  bump-version:
+  on-success:
     if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
     name: "Bump version and create changelog with commitizen"
