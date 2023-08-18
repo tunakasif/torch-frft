@@ -1,7 +1,6 @@
 # Trainable Fractional Fourier Transform
 
-[![tox](https://github.com/tunakasif/torch-frft/actions/workflows/tox.yml/badge.svg?branch=main)](https://github.com/tunakasif/torch-frft/actions/workflows/tox.yml)
-[![commitizen](https://github.com/tunakasif/torch-frft/actions/workflows/bump.yml/badge.svg?branch=main)](https://github.com/tunakasif/torch-frft/actions/workflows/bump.yml)
+[![Tox & Bump Version](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml/badge.svg)](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml)
 [![Python Versions](https://img.shields.io/badge/python-3.10%20|%203.11-blue.svg)](https://img.shields.io/badge/python-3.10%20|%203.11-blue.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)
 
