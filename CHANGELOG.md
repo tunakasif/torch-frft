@@ -1,3 +1,9 @@
+## 0.5.4 (2023-08-18)
+
+### Fix
+
+- **ci**: remove bump from pr trigger
+
 ## 0.5.3 (2023-08-18)
 
 ### Fix
