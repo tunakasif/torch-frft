@@ -36,7 +36,7 @@ This GitHub repository is `pip`/`poetry` installable. You can install the packag
 #### Using `pip`
 
 ```sh
-pip install git+https://github.com/tunakasif/torch-frft.git
+pip install torch-frft
 ```
 
 #### Using `poetry`
@@ -44,7 +44,7 @@ pip install git+https://github.com/tunakasif/torch-frft.git
 Either run the following command:
 
 ```sh
-poetry add git+https://github.com/tunakasif/torch-frft.git
+poetry add torch-frft
 ```
 
 or add the following to your `pyproject.toml` file:
