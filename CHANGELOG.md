@@ -1,3 +1,9 @@
+## 0.6.1 (2023-08-27)
+
+### Fix
+
+- relax `torch` version requirement
+
 ## 0.6.0 (2023-08-27)
 
 ### Feat
