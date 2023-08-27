@@ -1,7 +1,15 @@
 import pytest
 import torch
 
-from torch_frft.frft_module import _bizdec, _bizinter, _corefrmod2, _dflip, frft
+from torch_frft.frft_module import (
+    _bizdec,
+    _bizinter,
+    _corefrmod2,
+    _dflip,
+    frft,
+    frft_shifted,
+    ifrft,
+)
 
 
 def test_dflip_1d() -> None:
@@ -212,6 +220,52 @@ def test_frft_integer() -> None:
         fftshift(ifft(ifft(fftshift(x)))) * torch.tensor(N),
         atol=tol,
     )
+
+
+def test_frft_shifted() -> None:
+    from torch.fft import fft, ifft
+
+    tol = 1e-3
+    N = 1000
+    torch.manual_seed(0)
+    x = torch.rand(N)
+
+    assert torch.allclose(frft(x, torch.tensor(0.0)), x, atol=tol)
+    assert torch.allclose(
+        frft_shifted(x, 1.0),
+        fft(x, norm="ortho"),
+        atol=tol,
+    )
+    assert torch.allclose(
+        frft_shifted(x, -1.0),
+        ifft(x, norm="ortho"),
+        atol=tol,
+    )
+    assert torch.allclose(
+        frft(x, 2.0).to(torch.complex64),
+        fft(fft(x, norm="ortho"), norm="ortho"),
+        atol=tol,
+    )
+    assert torch.allclose(
+        frft(x, -2.0).to(torch.complex64),
+        ifft(ifft(x, norm="ortho"), norm="ortho"),
+        atol=tol,
+    )
+
+
+def test_ifrft() -> None:
+    tol = 1e-5
+    N = 1000
+    torch.manual_seed(0)
+    x = torch.rand(N)
+
+    a_values = torch.rand(100)
+    for a in a_values:
+        assert torch.allclose(
+            frft(x, -a),
+            ifrft(x, a),
+            atol=tol,
+        )
 
 
 def test_odd_size_error() -> None:

@@ -3,7 +3,7 @@ from pathlib import Path
 import scipy
 import torch
 
-from torch_frft.frft_module import frft
+from torch_frft.frft_module import frft, frft_shifted
 
 test_data_path = Path(__file__).parent.joinpath("data")
 X = torch.tensor(
@@ -151,19 +151,35 @@ def test_frftn() -> None:
 
 
 def test_base_case() -> None:
-    X = torch.rand(1000, 1000, dtype=torch.complex64)
+    X = torch.rand(100, 100)
+    tol = 1e-4
 
-    torch.allclose(
-        frft(frft(X, 1.0, dim=0), 1.0, dim=1),
-        torch.fft.fftn(X, norm="ortho"),
+    assert torch.allclose(
+        frft_shifted(X, 1.0, dim=-1),
+        torch.fft.fft(X, norm="ortho", dim=-1),
+        atol=tol,
     )
-    torch.allclose(
-        frft(frft(X, -1.0, dim=0), -1.0, dim=1),
+
+    assert torch.allclose(
+        frft_shifted(X, 1.0, dim=0),
+        torch.fft.fft(X, norm="ortho", dim=0),
+        atol=tol,
+    )
+
+    assert torch.allclose(
+        frft_shifted(frft_shifted(X, 1.0, dim=0), 1.0, dim=1),
+        torch.fft.fft2(X, norm="ortho"),
+        atol=tol,
+    )
+    assert torch.allclose(
+        frft_shifted(frft_shifted(X, -1.0, dim=0), -1.0, dim=1),
         torch.fft.ifftn(X, norm="ortho"),
+        atol=tol,
     )
-    torch.allclose(
-        frft(frft(X, 2.0, dim=0), 2.0, dim=1),
+    assert torch.allclose(
+        frft_shifted(frft_shifted(X, 2.0, dim=0), 2.0, dim=1).to(torch.complex64),
         torch.fft.fftn(torch.fft.fftn(X, norm="ortho"), norm="ortho"),
+        atol=tol,
     )
 
 

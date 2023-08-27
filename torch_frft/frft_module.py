@@ -1,5 +1,9 @@
 import torch
-from torch.fft import fft, ifft
+from torch.fft import fft, fftshift, ifft
+
+
+def frft_shifted(fc: torch.Tensor, a_param: float | torch.Tensor, *, dim: int = -1) -> torch.Tensor:
+    return fftshift(frft(fftshift(fc, dim=dim), a_param, dim=dim), dim=dim)
 
 
 def ifrft(fc: torch.Tensor, a_param: float | torch.Tensor, *, dim: int = -1) -> torch.Tensor:

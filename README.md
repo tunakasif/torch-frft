@@ -202,3 +202,22 @@ for epoch in range(epochs):
         print(f"Epoch {epoch:4d} | Loss {output.item():.4f}")
 print("Final a:", model.order)
 ```
+
+## FRFT Shift
+
+Note that the fast computation of continuous FRFT is defined for the central grid of $[-\lfloor\frac{N}{2}\rfloor, \lfloor\frac{N-1}{2}\rfloor$. Therefore, we need `fftshift()` to create equivalence with the original FFT when the transform order is precisely $1$. In this package, we also provide a shifted version of the fast FRFT computation, `frft_shifted()`, which operates with the assumption that the grid is $[0, N-1]$. The latter interval is not the default behavior since we want consistency with the original MATLAB implementation. The all there lines below are equivalent:
+
+```python
+import torch
+from torch.fft import fft, fftshift
+from torch_frft.frft_module import frft, frft_shifted
+
+torch.manual_seed(0)
+x = torch.rand(100)
+y1 = fft(x, norm="ortho")
+y2 = fftshift(frft(fftshift(x), 1.0))
+y3 = frft_shifted(x, 1.0)
+
+assert torch.allclose(y1, y2, atol=1e-5)
+assert torch.allclose(y1, y3, atol=1e-5)
+```
