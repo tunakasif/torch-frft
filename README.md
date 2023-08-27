@@ -8,13 +8,13 @@
 ![GitHub](https://img.shields.io/github/license/tunakasif/torch-frft)
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)
 
-A differentiable fractional Fourier transform (FRFT) implementation with layers that can be trained end-to-end with the rest of the network. This package provides implementations of both fast computation of continuous FRFT and discrete FRFT (DFRFT) and also provides pre-configured layers that can be used in neural networks.
+A differentiable fractional Fourier transform (FRFT) implementation with layers that can be trained end-to-end with the rest of the network. This package provides implementations of both fast computations of continuous FRFT and discrete FRFT (DFRFT) and pre-configured layers that are eligible for use in neural networks.
 
-The fast transform is an approximation of the continuous FRFT and is based on [_Digital computation of the fractional Fourier transform_](https://ieeexplore.ieee.org/document/536672) paper. The DFRFT is based on [_The discrete fractional Fourier transform_](https://ieeexplore.ieee.org/document/839980) paper. MATLAB implementations of both approaches are provided on [Haldun M. Özaktaş's page](http://www.ee.bilkent.edu.tr/~haldun/wileybook.html) as [`fracF.m`](http://www.ee.bilkent.edu.tr/~haldun/fracF.m) and [`dFRT.m`](http://www.ee.bilkent.edu.tr/~haldun/dFRT.m), respectively.
+The fast transform approximates the continuous FRFT and is based on [_Digital computation of the fractional Fourier transform_](https://ieeexplore.ieee.org/document/536672) paper. The DFRFT is based on _The_ discrete fractional Fourier transform_](https://ieeexplore.ieee.org/document/839980) paper. MATLAB implementations of both approaches are provided on [Haldun M. Özaktaş's page](http://www.ee.bilkent.edu.tr/~haldun/wileybook.html) as [`fracF.m`](http://www.ee.bilkent.edu.tr/~haldun/fracF.m) and [`dFRT.m`](http://www.ee.bilkent.edu.tr/~haldun/dFRT.m), respectively.
 
-This package implements these approaches in PyTorch with certain optimazations and most importantly adds the ability to apply the transform along a certain dimension of a tensor.
+This package implements these approaches in PyTorch with specific optimizations and, most notably, adds the ability to apply the transform along a particular tensor dimension.
 
-With the implemented transforms basic layers that extend `torch.nn.Module` is provided, an example of the custom layer implementation is also provided in [`README.md`](#custom-layers) file.
+We provide primer layers that extend `torch.nn.Module` for continuous and discrete transforms, an example of the custom layer implementation, is also provided in the `README.md` file.
 
 ## Table of Contents
 
@@ -27,6 +27,7 @@ With the implemented transforms basic layers that extend `torch.nn.Module` is pr
     - [Transforms](#transforms)
     - [Pre-configured Layers](#pre-configured-layers)
     - [Custom Layers](#custom-layers)
+  - [FRFT Shift](#frft-shift)
 
 ## Installation
 
@@ -52,7 +53,7 @@ This codebase utilizes [`Poetry`](https://python-poetry.org) for package managem
 poetry install
 ```
 
-or if you do not want to use `Poetry`, you can install the dependencies provided in [`requirements.txt`](requirements.txt) using `pip` or `conda`, e,g.,
+or one can install the dependencies provided in [`requirements.txt`](requirements.txt) using `pip` or `conda`, e,g.,
 
 ```sh
 pip install -r requirements.txt
@@ -62,9 +63,9 @@ pip install -r requirements.txt
 
 ### Transforms
 
-:warning: Transforms applied in the same device as the input tensor. If the input tensor is on GPU, the transform will be applied on GPU as well.
+:warning: Transforms applied in the same device as the input tensor. If the input tensor is on GPU, the transform will also be applied on GPU.
 
-The package provides transform functions that operate on the $n^{th}$ dimension of an input tensor, `frft()` and `dfrft()`, which correspond to the fast computation of continuous fractional Fourier transform (FRFT) and discrete fractional Fourier transform (DFRFT), respectively. It also provides a function `dfrftmtx()` which computes the DFRFT matrix for a given length and order similar to MATLAB's `dftmtx()` function for ordinary DFT matrix. Note that the `frft()` only operates on even-sized lengths as in the original MATLAB implementation [fracF.m](http://www.ee.bilkent.edu.tr/~haldun/fracF.m).
+The package provides transform functions that operate on the $n^{th}$ dimension of an input tensor, `frft()` and `dfrft()`, which correspond to the fast computation of continuous fractional Fourier transform (FRFT) and discrete fractional Fourier transform (DFRFT), respectively. It also provides a function `dfrftmtx()`, which computes the DFRFT matrix for a given length and order, similar to MATLAB's `dftmtx()` function for the ordinary DFT matrix. Note that the `frft()` only operates on even-sized lengths as in the original MATLAB implementation [fracF.m](http://www.ee.bilkent.edu.tr/~haldun/fracF.m).
 
 ```python
 import torch
@@ -126,7 +127,7 @@ print("Original  a:", a_original)
 print("Estimated a:", model.order.item())
 ```
 
-Note that you can also place these layers directly into `torch.nn.Sequential`. Remark that these transforms generate complex-valued outputs, so you may need to convert them to real-valued outputs, e.g., taking the real part, absolute value, etc. For example, the following code snippet implements a simple fully-connected network with real parts of `FrFTLayer` and `DFrFTLayer` in between:
+One can also place these layers directly into the `torch.nn.Sequential`. Remark that these transforms generate complex-valued outputs, so one may need to convert them to real-valued outputs, e.g., taking the real part, absolute value, etc. For example, the following code snippet implements a simple fully connected network with real parts of `FrFTLayer` and `DFrFTLayer` in between:
 
 ```python
 class Real(nn.Module):
@@ -152,7 +153,7 @@ model = nn.Sequential(
 
 ### Custom Layers
 
-It is also possible to create custom layers with the provided `frft()` and `dfrft()` functions. The below example contains in-between `Linear` and `ReLU` layers and the same fractional order for forward and backward DFRFT transforms is as follows:
+Creating custom layers with the provided `frft()` and `dfrft()` functions is also possible. The below example contains in-between `Linear` and `ReLU` layers and the same fractional order for forward and backward DFRFT transforms is as follows:
 
 ```python
 import torch
