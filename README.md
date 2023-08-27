@@ -206,7 +206,7 @@ print("Final a:", model.order)
 
 ## FRFT Shift
 
-Note that the fast computation of continuous FRFT is defined for the central grid of $[-\lfloor\frac{N}{2}\rfloor, \lfloor\frac{N-1}{2}\rfloor$. Therefore, we need `fftshift()` to create equivalence with the original FFT when the transform order is precisely $1$. In this package, we also provide a shifted version of the fast FRFT computation, `frft_shifted()`, which operates with the assumption that the grid is $[0, N-1]$. The latter interval is not the default behavior since we want consistency with the original MATLAB implementation. The all there lines below are equivalent:
+Note that the fast computation of continuous FRFT is defined for the central grid of $\left[-\lfloor\frac{N}{2}\rfloor, \lfloor\frac{N-1}{2}\rfloor\right]$. Therefore, we need `fftshift()` to create equivalence with the original FFT when the transform order is precisely $1$. In this package, we also provide a shifted version of the fast FRFT computation, `frft_shifted()`, which operates with the assumption that the grid is $[0, N-1]$. The latter interval is not the default behavior since we want consistency with the original MATLAB implementation. The all there lines below are equivalent:
 
 ```python
 import torch
