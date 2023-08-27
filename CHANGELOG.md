@@ -1,3 +1,9 @@
+## 0.6.0 (2023-08-27)
+
+### Feat
+
+- implement shifted version of `frft()`
+
 ## 0.5.4 (2023-08-18)
 
 ### Fix
