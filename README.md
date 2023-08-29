@@ -1,12 +1,12 @@
 # Trainable Fractional Fourier Transform
 
-![PyPI](https://img.shields.io/pypi/v/torch-frft)
+[![PyPI](https://img.shields.io/pypi/v/torch-frft)](https://pypi.org/project/torch-frft)
 [![Tox & Bump Version](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml/badge.svg)](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml)
-![Codecov](https://img.shields.io/codecov/c/github/tunakasif/torch-frft)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/torch-frft)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/torch-frft)
-![GitHub](https://img.shields.io/github/license/tunakasif/torch-frft)
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)
+[![Codecov](https://img.shields.io/codecov/c/github/tunakasif/torch-frft)](https://app.codecov.io/gh/tunakasif/torch-frft)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/torch-frft)](https://pypi.org/project/torch-frft)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/torch-frft)](https://pypi.org/project/torch-frft)
+[![GitHub](https://img.shields.io/github/license/tunakasif/torch-frft)](https://github.com/tunakasif/torch-frft/blob/main/LICENSE)
+[![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)](https://pytorch.org/)
 
 A differentiable fractional Fourier transform (FRFT) implementation with layers that can be trained end-to-end with the rest of the network. This package provides implementations of both fast computations of continuous FRFT and discrete FRFT (DFRFT) and pre-configured layers that are eligible for use in neural networks.
 
