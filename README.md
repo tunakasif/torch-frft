@@ -10,7 +10,7 @@
 
 A differentiable fractional Fourier transform (FRFT) implementation with layers that can be trained end-to-end with the rest of the network. This package provides implementations of both fast computations of continuous FRFT and discrete FRFT (DFRFT) and pre-configured layers that are eligible for use in neural networks.
 
-The fast transform approximates the continuous FRFT and is based on [_Digital computation of the fractional Fourier transform_](https://ieeexplore.ieee.org/document/536672) paper. The DFRFT is based on _The_ discrete fractional Fourier transform_](https://ieeexplore.ieee.org/document/839980) paper. MATLAB implementations of both approaches are provided on [Haldun M. Özaktaş's page](http://www.ee.bilkent.edu.tr/~haldun/wileybook.html) as [`fracF.m`](http://www.ee.bilkent.edu.tr/~haldun/fracF.m) and [`dFRT.m`](http://www.ee.bilkent.edu.tr/~haldun/dFRT.m), respectively.
+The fast transform approximates the continuous FRFT and is based on [_Digital computation of the fractional Fourier transform_](https://ieeexplore.ieee.org/document/536672) paper. The DFRFT is based on [_The discrete fractional Fourier transform_](https://ieeexplore.ieee.org/document/839980) paper. MATLAB implementations of both approaches are provided on [Haldun M. Özaktaş's page](http://www.ee.bilkent.edu.tr/~haldun/wileybook.html) as [`fracF.m`](http://www.ee.bilkent.edu.tr/~haldun/fracF.m) and [`dFRT.m`](http://www.ee.bilkent.edu.tr/~haldun/dFRT.m), respectively.
 
 This package implements these approaches in PyTorch with specific optimizations and, most notably, adds the ability to apply the transform along a particular tensor dimension.
 
