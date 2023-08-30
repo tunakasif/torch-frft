@@ -1,6 +1,7 @@
 # Trainable Fractional Fourier Transform
 
 [![PyPI](https://img.shields.io/pypi/v/torch-frft)](https://pypi.org/project/torch-frft)
+[![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/torch-frft)](https://anaconda.org/conda-forge/torch-frft)
 [![Tox & Bump Version](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml/badge.svg)](https://github.com/tunakasif/torch-frft/actions/workflows/build.yml)
 [![Codecov](https://img.shields.io/codecov/c/github/tunakasif/torch-frft)](https://app.codecov.io/gh/tunakasif/torch-frft)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/torch-frft)](https://pypi.org/project/torch-frft)
@@ -43,6 +44,12 @@ or
 
 ```sh
 poetry add torch-frft
+```
+
+or directly from [`Conda`](https://anaconda.org/conda-forge/torch-frft) 
+
+```sh
+conda install -c conda-forge torch-frft
 ```
 
 ### For Development
