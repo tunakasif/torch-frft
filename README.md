@@ -17,6 +17,22 @@ This package implements these approaches in PyTorch with specific optimizations 
 
 We provide primer layers that extend `torch.nn.Module` for continuous and discrete transforms, an example of the custom layer implementation, is also provided in the `README.md` file.
 
+We developed this project for the [_Trainable Fractional Fourier Transform_](https://ieeexplore.ieee.org/document/10458263) paper, published in _IEEE Signal Processing Letters_. You can also access the [paper's GitHub page](https://github.com/koc-lab/TrainableFrFT) for experiments and example usage. If you find this package useful, please consider citing as follows:
+
+```bibtex
+@article{trainable-frft-2024,
+  author   = {Koc, Emirhan and Alikasifoglu, Tuna and Aras, Arda Can and Koc, Aykut},
+  journal  = {IEEE Signal Processing Letters},
+  title    = {Trainable Fractional Fourier Transform},
+  year     = {2024},
+  volume   = {},
+  number   = {},
+  pages    = {1-5},
+  keywords = {Vectors;Convolution;Training;Task analysis;Computational modeling;Time series analysis;Feature extraction;Machine learning;neural networks;FT;fractional FT;deep learning},
+  doi      = {10.1109/LSP.2024.3372779}
+}
+```
+
 ## Table of Contents
 
 - [Trainable Fractional Fourier Transform](#trainable-fractional-fourier-transform)
@@ -70,7 +86,8 @@ pip install -r requirements.txt
 
 ### Transforms
 
-:warning: Transforms applied in the same device as the input tensor. If the input tensor is on GPU, the transform will also be applied on GPU.
+> [!WARNING]  
+> Transforms applied in the same device as the input tensor. If the input tensor is on GPU, the transform will also be applied on GPU.
 
 The package provides transform functions that operate on the $n^{th}$ dimension of an input tensor, `frft()` and `dfrft()`, which correspond to the fast computation of continuous fractional Fourier transform (FRFT) and discrete fractional Fourier transform (DFRFT), respectively. It also provides a function `dfrftmtx()`, which computes the DFRFT matrix for a given length and order, similar to MATLAB's `dftmtx()` function for the ordinary DFT matrix. Note that the `frft()` only operates on even-sized lengths as in the original MATLAB implementation [fracF.m](http://www.ee.bilkent.edu.tr/~haldun/fracF.m).
 

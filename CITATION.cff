@@ -1,10 +1,33 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-authors:
-  - family-names: "Alikaşifoğlu"
-    given-names: "Tuna"
-    orcid: "https://orcid.org/0000-0001-8030-8088"
-title: "PyTorch Differentiable Fractional Fourier Transform"
-version: 0.6.1
-date-released: 2023-08-08
-url: "https://github.com/tunakasif/torch-frft"
+preferred-citation:
+  authors:
+    - family-names: Koç
+      given-names: Emirhan
+    - family-names: Alikaşifoğlu
+      given-names: Tuna
+      orcid: "https://orcid.org/0000-0001-8030-8088"
+    - family-names: Aras
+      given-names: Arda Can
+    - family-names: Koç
+      given-names: Aykut
+  doi: 10.1109/lsp.2024.3372779
+  identifiers:
+    - type: doi
+      value: 10.1109/lsp.2024.3372779
+    - type: url
+      value: http://dx.doi.org/10.1109/LSP.2024.3372779
+    - type: other
+      value: urn:issn:1070-9908
+  title: Trainable Fractional Fourier Transform
+  url: http://dx.doi.org/10.1109/LSP.2024.3372779
+  database: Crossref
+  date-published: 2024-03-04
+  year: 2024
+  issn: 1070-9908
+  journal: IEEE Signal Processing Letters
+  publisher:
+    name: Institute of Electrical and Electronics Engineers (IEEE)
+  start: '1'
+  end: '5'
+  type: article
