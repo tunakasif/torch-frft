@@ -6,7 +6,6 @@ preferred-citation:
       given-names: Emirhan
     - family-names: Alikaşifoğlu
       given-names: Tuna
-      orcid: "https://orcid.org/0000-0001-8030-8088"
     - family-names: Aras
       given-names: Arda Can
     - family-names: Koç
@@ -28,6 +27,8 @@ preferred-citation:
   journal: IEEE Signal Processing Letters
   publisher:
     name: Institute of Electrical and Electronics Engineers (IEEE)
-  start: '1'
-  end: '5'
+  start: '751'
+  end: '755'
   type: article
+  volume: '31'
+
