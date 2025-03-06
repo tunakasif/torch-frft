@@ -1,3 +1,9 @@
+## 0.7.0 (2025-03-06)
+
+### Feat
+
+- **package-manager**: switch from poetry to uv (#24)
+
 ## 0.6.1 (2023-08-27)
 
 ### Fix
