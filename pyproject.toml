@@ -3,6 +3,8 @@ name = "torch-frft"
 version = "0.7.0"
 description = "PyTorch implementation of the fractional Fourier transform with trainable transform order."
 readme = "README.md"
+authors = [{ name = "Tuna Alikaşifoğlu", email = "tunakasif@gmail.com" }]
+dynamic = ["classifiers"]
 requires-python = ">=3.10,<3.13"
 dependencies = ["torch>=2.0.0", "numpy>=1.22.4,<=2.1.0", "scipy>=1.13.1"]
 
