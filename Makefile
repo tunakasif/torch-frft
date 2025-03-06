@@ -1,5 +1,5 @@
 PROJECT_NAME:=torch_frft
-EXECUTER:=poetry run
+EXECUTER:=uv run
 
 all: requirements format lint security test
 
@@ -10,16 +10,14 @@ test:
 	$(EXECUTER) pytest --cov-report term-missing --cov-report html --cov $(PROJECT_NAME)/
 
 requirements:
-	poetry export -f requirements.txt -o requirements.txt --with dev --without-hashes
+	uv export --no-hashes --format requirements-txt > requirements.txt
 
 format:
-	$(EXECUTER) isort --diff -c .
-	$(EXECUTER) black --diff --check --color .
+	$(EXECUTER) ruff format .
 
 lint:
-	$(EXECUTER) ruff check .
+	$(EXECUTER) ruff check . --fix
 	$(EXECUTER) mypy .
-	$(EXECUTER) pyupgrade --py310-plus **/*.py
 
 security:
 	$(EXECUTER) bandit -r $(PROJECT_NAME)/

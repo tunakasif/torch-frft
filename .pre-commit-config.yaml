@@ -5,22 +5,12 @@ repos:
     hooks:
       - id: commitizen
       - id: commitizen-branch
-        stages: [push]
+        stages: [pre-push]
   - repo: local
     hooks:
-      - id: poetry-export
+      - id: requirements
         name: requirements
-        entry: poetry export
-        args:
-          [
-            "-f",
-            "requirements.txt",
-            "-o",
-            "requirements.txt",
-            "--with",
-            "dev",
-            "--without-hashes",
-          ]
+        entry: make requirements
         language: system
         pass_filenames: false
   - repo: local

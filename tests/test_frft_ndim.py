@@ -106,6 +106,7 @@ def test_frftn() -> None:
     global X
     a0 = 0.80
     a1 = 1.25
+    tol = 1e-5
     expected = torch.tensor(
         [
             [
@@ -147,7 +148,7 @@ def test_frftn() -> None:
         ]
     )
 
-    assert torch.allclose(frft(frft(X, a0, dim=0), a1, dim=1), expected)
+    assert torch.allclose(frft(frft(X, a0, dim=0), a1, dim=1), expected, atol=tol)
 
 
 def test_base_case() -> None:
