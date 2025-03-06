@@ -52,16 +52,10 @@ We developed this project for the [_Trainable Fractional Fourier Transform_](htt
 
 ### For Usage
 
-You can install the package directly from [`PYPI`](https://pypi.org/project/torch-frft/) using `pip` or `poetry` as follows:
+You can install the package directly from [`PYPI`](https://pypi.org/project/torch-frft/) as follows:
 
 ```sh
 pip install torch-frft
-```
-
-or
-
-```sh
-poetry add torch-frft
 ```
 
 or directly from [`Conda`](https://anaconda.org/conda-forge/torch-frft)
@@ -72,10 +66,10 @@ conda install -c conda-forge torch-frft
 
 ### For Development
 
-This codebase utilizes [`Poetry`](https://python-poetry.org) for package management. To install the dependencies:
+This codebase utilizes [`uv`](https://docs.astral.sh/uv/) for package management. To install the dependencies:
 
 ```sh
-poetry install
+uv sync
 ```
 
 or one can install the dependencies provided in [`requirements.txt`](requirements.txt) using `pip` or `conda`, e.g.,
@@ -88,7 +82,7 @@ pip install -r requirements.txt
 
 ### Transforms
 
-> [!WARNING]  
+> [!WARNING]
 > Transforms applied in the same device as the input tensor. If the input tensor is on GPU, the transform will also be applied on GPU.
 
 The package provides transform functions that operate on the $n^{th}$ dimension of an input tensor, `frft()` and `dfrft()`, which correspond to the fast computation of continuous fractional Fourier transform (FRFT) and discrete fractional Fourier transform (DFRFT), respectively. It also provides a function `dfrftmtx()`, which computes the DFRFT matrix for a given length and order, similar to MATLAB's `dftmtx()` function for the ordinary DFT matrix. Note that the `frft()` only operates on even-sized lengths as in the original MATLAB implementation [fracF.m](http://www.ee.bilkent.edu.tr/~haldun/fracF.m).
