@@ -1,3 +1,11 @@
+## 0.7.1 (2025-03-06)
+
+### Fix
+
+- **project**: update classifiers
+- **publish**: convert to trusted publishing
+- **metadata**: add information automated by poetry
+
 ## 0.7.0 (2025-03-06)
 
 ### Feat
