@@ -1,3 +1,5 @@
+<!--markdownlint-disable MD013-->
+
 # Trainable Fractional Fourier Transform
 
 [![PyPI](https://img.shields.io/pypi/v/torch-frft)](https://pypi.org/project/torch-frft)
@@ -62,7 +64,7 @@ or
 poetry add torch-frft
 ```
 
-or directly from [`Conda`](https://anaconda.org/conda-forge/torch-frft) 
+or directly from [`Conda`](https://anaconda.org/conda-forge/torch-frft)
 
 ```sh
 conda install -c conda-forge torch-frft
@@ -76,7 +78,7 @@ This codebase utilizes [`Poetry`](https://python-poetry.org) for package managem
 poetry install
 ```
 
-or one can install the dependencies provided in [`requirements.txt`](requirements.txt) using `pip` or `conda`, e,g.,
+or one can install the dependencies provided in [`requirements.txt`](requirements.txt) using `pip` or `conda`, e.g.,
 
 ```sh
 pip install -r requirements.txt
