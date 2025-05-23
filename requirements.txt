@@ -113,7 +113,7 @@ toml==0.10.2
 tomli==2.2.1 ; python_full_version <= '3.11'
 tomlkit==0.13.2
 torch==2.6.0
-tornado==6.4.2
+tornado==6.5.1
 tox==4.24.1
 traitlets==5.14.3
 triton==3.2.0 ; platform_machine == 'x86_64' and sys_platform == 'linux'
