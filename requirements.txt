@@ -97,7 +97,7 @@ pywin32==308 ; platform_python_implementation != 'PyPy' and sys_platform == 'win
 pyyaml==6.0.2
 pyzmq==26.2.1
 questionary==2.1.0
-requests==2.32.3
+requests==2.32.4
 rich==13.9.4
 ruff==0.9.9
 scipy==1.15.2
