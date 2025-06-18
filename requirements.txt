@@ -112,7 +112,7 @@ tokenize-rt==6.1.0
 toml==0.10.2
 tomli==2.2.1 ; python_full_version <= '3.11'
 tomlkit==0.13.2
-torch==2.6.0
+torch==2.7.1
 tornado==6.4.2
 tox==4.24.1
 traitlets==5.14.3
