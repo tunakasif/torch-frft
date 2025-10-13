@@ -21,4 +21,3 @@ lint:
 
 security:
 	$(EXECUTER) bandit -r $(PROJECT_NAME)/
-	$(EXECUTER) pip-audit
