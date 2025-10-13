@@ -1,3 +1,14 @@
+## 0.8.0 (2025-10-13)
+
+### Feat
+
+- **build**: add support for `python3.13`
+
+### Fix
+
+- **build**: remove numpy restriction
+- **test**: decrease tolerance for random input
+
 ## 0.7.1 (2025-03-06)
 
 ### Fix

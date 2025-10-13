@@ -1,6 +1,6 @@
 [project]
 name = "torch-frft"
-version = "0.7.1"
+version = "0.8.0"
 description = "PyTorch implementation of the fractional Fourier transform with trainable transform order."
 readme = "README.md"
 authors = [ { name = "Tuna Alikaşifoğlu", email = "tunakasif@gmail.com" } ]
@@ -64,7 +64,7 @@ disallow_untyped_defs = true
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "$version"
-version = "0.7.1"
+version = "0.8.0"
 version_files = [
   "pyproject.toml:^version",
   "torch_frft/__init__.py:__version__",
