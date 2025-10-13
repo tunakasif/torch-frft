@@ -4,12 +4,13 @@ version = "0.7.1"
 description = "PyTorch implementation of the fractional Fourier transform with trainable transform order."
 readme = "README.md"
 authors = [{ name = "Tuna Alikaşifoğlu", email = "tunakasif@gmail.com" }]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "torch>=2.0.0",
