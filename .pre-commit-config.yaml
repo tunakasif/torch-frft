@@ -8,13 +8,6 @@ repos:
         stages: [pre-push]
   - repo: local
     hooks:
-      - id: requirements
-        name: requirements
-        entry: make requirements
-        language: system
-        pass_filenames: false
-  - repo: local
-    hooks:
       - id: format
         name: format
         entry: make format
