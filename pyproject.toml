@@ -3,77 +3,72 @@ name = "torch-frft"
 version = "0.7.1"
 description = "PyTorch implementation of the fractional Fourier transform with trainable transform order."
 readme = "README.md"
-authors = [{ name = "Tuna Alikaşifoğlu", email = "tunakasif@gmail.com" }]
+authors = [ { name = "Tuna Alikaşifoğlu", email = "tunakasif@gmail.com" } ]
 requires-python = ">=3.10,<3.14"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "torch>=2.0.0",
-    "numpy>=1.22.4",
-    "scipy>=1.13.1",
+  "numpy>=1.22.4",
+  "scipy>=1.13.1",
+  "torch>=2",
 ]
 
 [dependency-groups]
 dev = [
-    "bandit>=1.8.0",
-    "commitizen>=4.1.0",
-    "ipykernel>=6.29.5",
-    "ipython>=8.14.0",
-    "mypy>=1.13.0",
-    "pep8-naming>=0.13.3",
-    "pip-audit>=2.5.6",
-    "pre-commit>=4.0.1",
-    "pytest-cov>=6.0.0",
-    "pytest>=8.3.4",
-    "pyupgrade>=3.4.0",
-    "ruff>=0.9.0",
-    "tox>=4.23.2",
+  "bandit>=1.8",
+  "commitizen>=4.1",
+  "ipykernel>=6.29.5",
+  "ipython>=8.14",
+  "mypy>=1.13",
+  "pep8-naming>=0.13.3",
+  "pip-audit>=2.5.6",
+  "pre-commit>=4.0.1",
+  "pytest>=8.3.4",
+  "pytest-cov>=6",
+  "pyupgrade>=3.4",
+  "ruff>=0.9",
+  "tox>=4.23.2",
 ]
 
 [tool.ruff]
 line-length = 100
-extend-exclude = ["docs"]
+extend-exclude = [ "docs" ]
 
-[tool.ruff.format]
+format.indent-style = "space"
 # Like Black
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-
-[tool.ruff.lint]
-extend-select = [
-    "A",  # flake8-builtins
-    "B",  # flake8-bugbear
-    "S",  # flake8-bandit
-    "I",  # isort
-    "UP", # pyupgrade
+format.quote-style = "double"
+format.line-ending = "auto"
+format.skip-magic-trailing-comma = false
+lint.extend-select = [
+  "A",  # flake8-builtins
+  "B",  # flake8-bugbear
+  "I",  # isort
+  "S",  # flake8-bandit
+  "UP", # pyupgrade
 ]
+lint.extend-per-file-ignores."*" = [ "B008" ]
+lint.extend-per-file-ignores."tests/*" = [ "S101" ]
 
-[tool.ruff.lint.extend-per-file-ignores]
-"*" = ["B008"]
-"tests/*" = ["S101"]
+[tool.pytest.ini_options]
+filterwarnings = [ "ignore::DeprecationWarning" ]
 
 [tool.mypy]
 ignore_missing_imports = true
 disallow_untyped_defs = true
-
-[tool.pytest.ini_options]
-filterwarnings = ["ignore::DeprecationWarning"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "$version"
 version = "0.7.1"
 version_files = [
-    "pyproject.toml:^version",
-    "torch_frft/__init__.py:__version__",
-    "CITATION.cff:^version",
+  "pyproject.toml:^version",
+  "torch_frft/__init__.py:__version__",
+  "CITATION.cff:^version",
 ]
 major_version_zero = true
 update_changelog_on_bump = true
