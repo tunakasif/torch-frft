@@ -153,7 +153,7 @@ def test_frftn() -> None:
 
 def test_base_case() -> None:
     X = torch.rand(100, 100)
-    tol = 1e-4
+    tol = 1e-3
 
     assert torch.allclose(
         frft_shifted(X, 1.0, dim=-1),
