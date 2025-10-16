@@ -65,6 +65,7 @@ disallow_untyped_defs = true
 name = "cz_conventional_commits"
 tag_format = "$version"
 version = "0.8.0"
+version_provider = "uv"
 version_files = [
   "pyproject.toml:^version",
   "torch_frft/__init__.py:__version__",
