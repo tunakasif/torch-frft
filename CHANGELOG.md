@@ -1,3 +1,10 @@
+## 0.8.2 (2026-04-14)
+
+### Fix
+
+- **ci**: release action token passing
+- **ci**: update actions to fix node deprecation
+
 ## 0.8.1 (2025-10-16)
 
 ### Fix
