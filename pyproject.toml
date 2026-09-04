@@ -52,7 +52,10 @@ lint.extend-select = [
   "S",  # flake8-bandit
   "UP", # pyupgrade
 ]
-lint.extend-per-file-ignores."*" = [ "B008" ]
+lint.extend-per-file-ignores."*" = [
+    "B008",
+    "PLW0602",
+]
 lint.extend-per-file-ignores."tests/*" = [ "S101" ]
 
 [tool.pytest.ini_options]
