@@ -1,5 +1,5 @@
 import torch
-import torch.nn as nn
+from torch import nn
 
 from torch_frft.dfrft_module import dfrft
 from torch_frft.frft_module import frft
